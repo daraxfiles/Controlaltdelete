@@ -1,0 +1,26 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "a7uSCesVnEMSZ2R5nAa8m"
+uri = "file://artifacts/mockup-sandbox/public/images/tools-banner.jpg"
+type = "image"
+title = "abstract digital media technology software UI dark mode"
+
+[[outputs]]
+id = "kZTOlOfjySnx83ZE0T4Om"
+uri = "file://artifacts/mockup-sandbox/public/images/fact-banner.jpg"
+type = "image"
+title = "magnifying glass analyzing data text dark theme"
+
+[[outputs]]
+id = "Sf1l7NbHKKZOKJ7B52G4O"
+uri = "file://artifacts/mockup-sandbox/public/images/games-banner.jpg"
+type = "image"
+title = "retro arcade gaming pixels dark moody aesthetic"
+
+[[outputs]]
+id = "Hpu8WOej9itqL9j3zqnxx"
+uri = "file://artifacts/mockup-sandbox/public/images/videos-banner.jpg"
+type = "image"
+title = "cinematic film camera lens dark dramatic lighting"

@@ -1,0 +1,344 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CTRL+ALT+MEDIA — Dark, terminal-inspired design system */
+:root {
+  --button-outline: rgba(255,255,255, .08);
+  --badge-outline: rgba(255,255,255, .06);
+  --opaque-button-border-intensity: 9;
+  --elevate-1: rgba(255,255,255, .04);
+  --elevate-2: rgba(255,255,255, .08);
+
+  /* Near-black backgrounds */
+  --background: 0 0% 5%;
+  --foreground: 0 0% 92%;
+
+  --border: 0 0% 16%;
+
+  --card: 0 0% 8%;
+  --card-foreground: 0 0% 92%;
+  --card-border: 0 0% 16%;
+
+  /* Sidebar */
+  --sidebar: 0 0% 7%;
+  --sidebar-foreground: 0 0% 92%;
+  --sidebar-border: 0 0% 16%;
+  --sidebar-primary: 145 85% 48%;
+  --sidebar-primary-foreground: 0 0% 5%;
+  --sidebar-accent: 0 0% 12%;
+  --sidebar-accent-foreground: 0 0% 92%;
+  --sidebar-ring: 145 85% 48%;
+
+  --popover: 0 0% 8%;
+  --popover-foreground: 0 0% 92%;
+  --popover-border: 0 0% 16%;
+
+  /* Electric green as primary, bright cyan as accent */
+  --primary: 145 85% 48%;
+  --primary-foreground: 0 0% 5%;
+
+  --secondary: 0 0% 12%;
+  --secondary-foreground: 0 0% 92%;
+
+  --muted: 0 0% 11%;
+  --muted-foreground: 0 0% 52%;
+
+  /* Bright cyan accent */
+  --accent: 185 90% 52%;
+  --accent-foreground: 0 0% 5%;
+
+  /* Warning orange */
+  --warning: 28 100% 55%;
+  --warning-foreground: 0 0% 5%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  --input: 0 0% 14%;
+  --ring: 145 85% 48%;
+
+  --chart-1: 145 85% 48%;
+  --chart-2: 185 90% 52%;
+  --chart-3: 28 100% 55%;
+  --chart-4: 339 90% 55%;
+  --chart-5: 262 83% 65%;
+
+  --font-sans: Inter, sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --radius: .25rem;
+
+  --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.25);
+  --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.30);
+  --shadow-sm: 0px 2px 4px 0px hsl(0 0% 0% / 0.30), 0px 1px 2px -1px hsl(0 0% 0% / 0.25);
+  --shadow: 0px 3px 6px 0px hsl(0 0% 0% / 0.35), 0px 1px 2px -1px hsl(0 0% 0% / 0.25);
+  --shadow-md: 0px 4px 8px 0px hsl(0 0% 0% / 0.40), 0px 2px 4px -1px hsl(0 0% 0% / 0.30);
+  --shadow-lg: 0px 8px 16px 0px hsl(0 0% 0% / 0.45), 0px 4px 6px -1px hsl(0 0% 0% / 0.30);
+  --shadow-xl: 0px 16px 32px 0px hsl(0 0% 0% / 0.50), 0px 8px 10px -1px hsl(0 0% 0% / 0.30);
+  --shadow-2xl: 0px 24px 48px 0px hsl(0 0% 0% / 0.55);
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+
+  --sidebar-primary-border: hsl(from hsl(var(--sidebar-primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --sidebar-accent-border: hsl(from hsl(var(--sidebar-accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --primary-border: hsl(from hsl(var(--primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --secondary-border: hsl(from hsl(var(--secondary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --muted-border: hsl(from hsl(var(--muted)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --accent-border: hsl(from hsl(var(--accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.6);
+  }
+}
+
+/* ── Terminal cursor blink ── */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.cursor-blink {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+/* ── Scan line ── */
+@keyframes scan {
+  0% { top: -4px; }
+  100% { top: 100%; }
+}
+.scan-line {
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.3), transparent);
+  animation: scan 4s linear infinite;
+  pointer-events: none;
+}
+
+/* ── Subtle glitch ── */
+@keyframes glitch-1 {
+  0%, 90%, 100% { clip-path: none; transform: none; }
+  91% { clip-path: polygon(0 5%, 100% 5%, 100% 15%, 0 15%); transform: translateX(-3px); }
+  93% { clip-path: polygon(0 70%, 100% 70%, 100% 80%, 0 80%); transform: translateX(3px); }
+  95% { clip-path: none; transform: none; }
+}
+.glitch { animation: glitch-1 8s infinite; }
+
+/* ── Progress bar pulse ── */
+@keyframes progress-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ── Glow effects ── */
+.glow-primary {
+  box-shadow: 0 0 20px hsl(var(--primary) / 0.4), 0 0 60px hsl(var(--primary) / 0.15);
+}
+.glow-accent {
+  box-shadow: 0 0 20px hsl(var(--accent) / 0.4), 0 0 60px hsl(var(--accent) / 0.15);
+}
+.text-glow-primary {
+  text-shadow: 0 0 20px hsl(var(--primary) / 0.7), 0 0 40px hsl(var(--primary) / 0.3);
+}
+.text-glow-accent {
+  text-shadow: 0 0 20px hsl(var(--accent) / 0.7);
+}
+
+/* ── Gradient text ── */
+.gradient-text {
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Grid / dot patterns ── */
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(to right, hsl(var(--primary) / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(var(--primary) / 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.bg-dots-pattern {
+  background-image: radial-gradient(circle, hsl(var(--primary) / 0.10) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ── Terminal box ── */
+.terminal-box {
+  background: hsl(0 0% 3%);
+  border: 1px solid hsl(var(--primary) / 0.35);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+.terminal-box .terminal-header {
+  border-bottom: 1px solid hsl(var(--primary) / 0.2);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Status badges ── */
+.badge-verified   { background: hsl(145 85% 48% / 0.15); color: hsl(145 85% 60%); border: 1px solid hsl(145 85% 48% / 0.35); }
+.badge-pending    { background: hsl(28 100% 55% / 0.15);  color: hsl(28 100% 65%);  border: 1px solid hsl(28 100% 55% / 0.35); }
+.badge-progress   { background: hsl(185 90% 52% / 0.15);  color: hsl(185 90% 65%);  border: 1px solid hsl(185 90% 52% / 0.35); }
+.badge-responded  { background: hsl(262 83% 65% / 0.15);  color: hsl(262 83% 75%);  border: 1px solid hsl(262 83% 65% / 0.35); }
+.badge-error      { background: hsl(0 72% 51% / 0.15);    color: hsl(0 72% 65%);    border: 1px solid hsl(0 72% 51% / 0.35); }
+
+/* ── Card accent tops ── */
+.card-accent-primary { border-top: 2px solid hsl(var(--primary)); }
+.card-accent-accent  { border-top: 2px solid hsl(var(--accent)); }
+.card-accent-warning { border-top: 2px solid hsl(var(--warning)); }
+.card-accent-purple  { border-top: 2px solid hsl(var(--chart-5)); }
+.card-accent-red     { border-top: 2px solid hsl(var(--destructive)); }
+
+/* ── Section gradient ── */
+.section-gradient-primary {
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.06) 0%, hsl(var(--accent) / 0.04) 100%);
+}
+
+/* ── Rainbow/gradient line ── */
+.rainbow-line {
+  height: 1px;
+  background: linear-gradient(90deg,
+    hsl(var(--primary)) 0%,
+    hsl(var(--accent)) 33%,
+    hsl(var(--warning)) 66%,
+    hsl(var(--chart-5)) 100%
+  );
+}
+
+/* ── System label ── */
+.system-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: hsl(var(--primary));
+  font-weight: 700;
+}
+
+/* ── Timeline connector dot ── */
+@keyframes flow-down {
+  0%   { top: 0%;   opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.connector-dot {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: hsl(var(--primary));
+  box-shadow: 0 0 6px hsl(var(--primary) / 0.8);
+  animation: flow-down 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ── Mission card select pulse ── */
+@keyframes card-select-pulse {
+  0%   { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.5); }
+  70%  { box-shadow: 0 0 0 8px hsl(var(--primary) / 0); }
+  100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0); }
+}
+.card-select-pulse {
+  animation: card-select-pulse 0.4s ease-out;
+}
+
+/* ── Count-up number flash ── */
+@keyframes num-flash {
+  0%   { color: hsl(var(--primary)); }
+  50%  { color: hsl(var(--accent)); }
+  100% { color: hsl(var(--primary)); }
+}
+.num-flash {
+  animation: num-flash 0.3s ease-out;
+}
+
+/* ── Stage node glow ── */
+.node-active {
+  box-shadow: 0 0 0 4px hsl(var(--primary) / 0.15), 0 0 20px hsl(var(--primary) / 0.35);
+}
+.node-active-ring {
+  animation: cursor-blink 2s ease-in-out infinite;
+}
+
+/* ── Slide down detail panel ── */
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.slide-down {
+  animation: slide-down 0.2s ease-out;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-blink,
+  .scan-line,
+  .glitch,
+  .animate-pulse,
+  .animate-bounce,
+  .connector-dot,
+  .card-select-pulse,
+  .num-flash,
+  .slide-down {
+    animation: none !important;
+  }
+}
+
+/* ── Elevation system ── */
+@layer utilities {
+  input[type="search"]::-webkit-search-cancel-button { @apply hidden; }
+  [contenteditable][data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: hsl(var(--muted-foreground));
+    pointer-events: none;
+  }
+
+  .no-default-hover-elevate {}
+  .no-default-active-elevate {}
+
+  .hover-elevate:not(.no-default-hover-elevate),
+  .active-elevate:not(.no-default-active-elevate) {
+    position: relative;
+    z-index: 0;
+  }
+  .hover-elevate:not(.no-default-hover-elevate)::after,
+  .active-elevate:not(.no-default-active-elevate)::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    z-index: 999;
+  }
+  .hover-elevate:hover:not(.no-default-hover-elevate)::after { background-color: var(--elevate-1); }
+  .active-elevate:active:not(.no-default-active-elevate)::after { background-color: var(--elevate-2); }
+}

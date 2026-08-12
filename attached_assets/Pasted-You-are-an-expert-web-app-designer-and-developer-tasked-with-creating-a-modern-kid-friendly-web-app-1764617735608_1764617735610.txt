@@ -1,0 +1,339 @@
+You are an expert web app designer and developer tasked with creating a modern, kid-friendly web application for a Media Production Bootcamp for Middle Schoolers (grades 6–8).
+Overall Goal
+Design and build a responsive web app that:
+Clearly explains the bootcamp (who it’s for, what they’ll learn, when/where it happens).
+
+
+Highlights the media components and sample projects.
+
+
+Showcases daily activities and camp structure.
+
+
+Includes an interactive “Create Your Media Project” workspace where middle schoolers can go from idea to final media product (A–Z): conceptualizing, script writing, collaboration, review, editing, and sharing.
+
+
+Uses simple language and visuals that appeal to middle school students, but is clear for parents and teachers too.
+
+
+
+Design & Style Requirements
+Clean, modern, and colorful interface with big buttons and clear headings.
+
+
+Age-appropriate (11–14 years): fun but not childish.
+
+
+Fully responsive (works on desktop, tablet, and mobile).
+
+
+Clear navigation menu, with icons where helpful.
+
+
+Avoid long blocks of text; use sections, bullets, and cards.
+
+
+
+Main Navigation & Pages
+Create the following main tabs/pages:
+Home
+
+
+Short, engaging tagline (e.g., “Create, Film, and Tell Your Story”).
+
+
+Brief overview of the bootcamp in simple language.
+
+
+Hero section with:
+
+
+A short description (1–2 paragraphs).
+
+
+A “Learn More” button that links to the About the Camp page.
+
+
+A “Register” button (dummy link or placeholder).
+
+
+Highlight 3–4 key outcomes (e.g., “Plan a story,” “Shoot and edit video,” “Work in a media team”).
+
+
+About the Camp
+
+
+Who the camp is for (middle schoolers, grades, age range).
+
+
+Goals of the camp (e.g., media literacy, storytelling, collaboration, critical thinking).
+
+
+Schedule overview: duration (e.g., 1-week bootcamp), daily time, sample daily routine.
+
+
+Section for parents: what their kids will gain (skills, confidence, digital citizenship).
+
+
+Media Components
+
+
+Explain the types of media students will work with:
+
+
+Video (short films, interviews, news segments)
+
+
+Audio (podcasts, voiceovers)
+
+
+Images (photo stories, posters, social media graphics)
+
+
+For each media type, include:
+
+
+A short description in kid-friendly language.
+
+
+Example project idea (e.g., “Create a 60-second ‘News from Our School’”).
+
+
+Optional: simple icons or cards for each media component.
+
+
+Camp Activities
+
+
+Break down the bootcamp into daily or themed activities:
+
+
+Day 1: Storytelling & Idea Generation
+
+
+Day 2: Script Writing & Storyboarding
+
+
+Day 3: Filming/Recording & Production
+
+
+Day 4: Editing & Feedback
+
+
+Day 5: Final Showcase & Reflection
+
+
+For each activity:
+
+
+Short description of what students do.
+
+
+Skills they practice (e.g., collaboration, communication, editing).
+
+
+Include a simple timeline or visual flow so middle schoolers can see the journey from start to finish.
+
+
+Create Your Media Project (Interactive Workspace)
+ This is the core interactive tab where students walk through the entire content creation process from A–Z. Create a structured, step-by-step workflow with clear sections:
+
+
+Step 1: Conceptualize
+
+
+Prompt students to pick a project type (e.g., short film, podcast, photo story).
+
+
+Simple form or checklist for:
+
+
+Topic/idea
+
+
+Audience (who is this for?)
+
+
+Purpose (inform, entertain, persuade)
+
+
+Provide 2–3 example prompts to inspire ideas.
+
+
+Step 2: Story & Script Writing
+
+
+Text area where students can:
+
+
+Write a short synopsis (what happens in the story?)
+
+
+Create a simple script (dialogue, narration).
+
+
+Optional: a basic storyboard template (e.g., boxes for Scene 1, Scene 2… with description fields).
+
+
+Include writing tips in a sidebar (keep it kid-friendly).
+
+
+Step 3: Plan & Collaborate
+
+
+A simple collaboration planner:
+
+
+Fields for team members’ names and roles (director, camera, actor, editor, etc.).
+
+
+Checklist of tasks (e.g., “Finalize script,” “Gather props,” “Choose filming location”).
+
+
+Emphasize teamwork and respectful communication with 3–4 bullet-point guidelines.
+
+
+Step 4: Produce (Record/Film)
+
+
+Section listing recommended tools/equipment (phone, tablet, basic mic).
+
+
+Simple instructions on:
+
+
+Framing a shot
+
+
+Recording clear audio
+
+
+Keeping clips short and focused
+
+
+Allow students to upload file placeholders (or at least see where they would manage their media files, even if actual upload functionality is not implemented yet).
+
+
+Step 5: Edit
+
+
+Provide a list of beginner-friendly editing tools (web-based or free apps) with short descriptions.
+
+
+Add a checklist for editing:
+
+
+Import clips
+
+
+Cut mistakes
+
+
+Add titles and transitions
+
+
+Add background music (if allowed)
+
+
+Export final version
+
+
+Include space where students can write an “editing log” or notes on changes.
+
+
+Step 6: Review & Feedback
+
+
+Reflection prompts:
+
+
+“What are you proud of?”
+
+
+“What would you improve next time?”
+
+
+A simple self-assessment or peer review template with a few rating scales and comment fields (e.g., 1–5 stars for “Story clarity,” “Sound quality,” “Teamwork”).
+
+
+Step 7: Share & Showcase
+
+
+Section where students can:
+
+
+Paste a link to their final project (e.g., YouTube, school LMS, or class drive).
+
+
+Write a short “project description” for the showcase.
+
+
+Add a “Gallery” or “Showcase Wall” layout where hypothetical student projects would appear (even if it’s just dummy data for now).
+
+
+Tools & Resources
+
+
+Curated list of simple tools for:
+
+
+Script writing (e.g., Google Docs, simple templates)
+
+
+Storyboarding (online tools or printable PDFs)
+
+
+Video editing (e.g., CapCut, iMovie, Clipchamp, WeVideo)
+
+
+Audio editing (e.g., Audacity, GarageBand, online editors)
+
+
+Image design (e.g., Canva, Adobe Express)
+
+
+For each tool: short description, difficulty level (Easy/Medium), and platform (mobile, web, desktop).
+
+
+FAQ & Contact
+
+
+Answer common questions from parents and students (e.g., “Do I need my own device?”, “Is prior experience required?”, “How much time per day?”).
+
+
+Simple contact form or placeholder (Name, Email, Message) for inquiries.
+
+
+
+Technical Requirements
+Use clear, semantic HTML structure and accessible design (contrast, alt text, keyboard-friendly).
+
+
+Organize the layout with reusable components for cards, sections, and step-by-step panels.
+
+
+If using a framework (e.g., React, Vue), structure components logically (navigation, home page, create-project wizard, etc.).
+
+
+Ensure the “Create Your Media Project” page feels like a guided wizard/flow rather than one long wall of text.
+
+
+
+Final Deliverable
+A complete, functional prototype of the web app with:
+
+
+All main pages/tabs implemented.
+
+
+Navigation working between sections.
+
+
+Interactive, form-based “Create Your Media Project” flow.
+
+
+Include placeholder text/images where real media would go.
+
+
+Code should be clean, well-commented, and easy to adapt for real-world use in a middle school media bootcamp.
+v
