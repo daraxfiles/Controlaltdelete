@@ -231,6 +231,25 @@
   );
 }
 
+/* ── Terminal input ── */
+.input-terminal {
+  padding: 0.625rem 1rem;
+  background: hsl(0 0% 8%);
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  border-radius: 2px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.input-terminal::placeholder {
+  color: hsl(var(--muted-foreground) / 0.35);
+}
+.input-terminal:focus {
+  border-color: hsl(var(--primary) / 0.5);
+}
+
 /* ── System label ── */
 .system-label {
   font-family: var(--font-mono);

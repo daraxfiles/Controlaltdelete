@@ -46,6 +46,75 @@ export const contacts = pgTable("contacts", {
   submittedAt: timestamp("submitted_at").defaultNow().notNull(),
 });
 
+// ── User Profiles (linked to Clerk user IDs) ──────────────────────────────
+export const userProfiles = pgTable("user_profiles", {
+  id: varchar("id", { length: 36 }).primaryKey(),
+  clerkUserId: text("clerk_user_id").notNull().unique(),
+  displayName: text("display_name").notNull(),
+  crewName: text("crew_name"),
+  bio: text("bio"),
+  role: text("role").default("youth").notNull(), // youth | facilitator | admin
+  foundingCrew: boolean("founding_crew").default(false).notNull(),
+  language: text("language").default("en").notNull(), // en | es
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// ── Mission Progress ───────────────────────────────────────────────────────
+export const missionProgress = pgTable("mission_progress", {
+  id: varchar("id", { length: 36 }).primaryKey(),
+  clerkUserId: text("clerk_user_id").notNull(),
+  missionId: text("mission_id").notNull(),
+  status: text("status").default("started").notNull(), // started | completed
+  notes: text("notes"),
+  startedAt: timestamp("started_at").defaultNow().notNull(),
+  completedAt: timestamp("completed_at"),
+});
+
+// ── Power Pings (outreach to decision-makers) ──────────────────────────────
+export const powerPings = pgTable("power_pings", {
+  id: varchar("id", { length: 36 }).primaryKey(),
+  clerkUserId: text("clerk_user_id").notNull(),
+  projectTitle: text("project_title").notNull(),
+  recipientName: text("recipient_name").notNull(),
+  recipientOrg: text("recipient_org").notNull(),
+  recipientRole: text("recipient_role").notNull(),
+  questions: text("questions").notNull(), // JSON array
+  patchUrl: text("patch_url"),
+  responseDeadline: text("response_deadline"),
+  status: text("status").default("sent").notNull(), // sent | responded | no_response | action_promised
+  responseNotes: text("response_notes"),
+  sentAt: timestamp("sent_at").defaultNow().notNull(),
+  respondedAt: timestamp("responded_at"),
+});
+
+// ── Evidence Receipts ──────────────────────────────────────────────────────
+export const evidenceReceipts = pgTable("evidence_receipts", {
+  id: varchar("id", { length: 36 }).primaryKey(),
+  clerkUserId: text("clerk_user_id").notNull(),
+  projectTitle: text("project_title").notNull(),
+  mainClaims: text("main_claims").notNull(),
+  sources: text("sources").notNull(),
+  interviews: text("interviews"),
+  documents: text("documents"),
+  verificationSteps: text("verification_steps").notNull(),
+  uncertainties: text("uncertainties"),
+  conflictsOfInterest: text("conflicts_of_interest"),
+  isPublic: boolean("is_public").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// ── Reboot Room Responses ─────────────────────────────────────────────────
+export const rebootRoomResponses = pgTable("reboot_room_responses", {
+  id: varchar("id", { length: 36 }).primaryKey(),
+  patchId: varchar("patch_id", { length: 36 }).notNull(),
+  clerkUserId: text("clerk_user_id"),
+  action: text("action").notNull(), // verify | amplify | apply
+  comment: text("comment"),
+  location: text("location"), // for "apply" — where they'll use it
+  isAnonymous: boolean("is_anonymous").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // ── Legacy (kept for backward compatibility with existing DB) ─────────────
 export const projects = pgTable("projects", {
   id: varchar("id", { length: 36 }).primaryKey(),

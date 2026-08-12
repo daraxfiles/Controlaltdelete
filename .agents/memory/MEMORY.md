@@ -1,0 +1,2 @@
+- [Clerk auth setup](clerk-auth.md) — Clerk provisioned; Tailwind 3 stack means no cssLayerName; use shadcn theme with terminal dark variables.
+- [Schema and new tables](new-tables.md) — userProfiles, missionProgress, powerPings, evidenceReceipts, rebootRoomResponses added and pushed.
