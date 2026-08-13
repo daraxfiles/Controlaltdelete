@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CTRL+ALT+MEDIA — Platform Overview</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;500;600;700;900&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0d0d;
+      --bg2: #111;
+      --bg3: #161616;
+      --border: #222;
+      --green: #16db65;
+      --green-dim: rgba(22,219,101,.12);
+      --cyan: #12d8e8;
+      --orange: #ff8c00;
+      --text: #eaeaea;
+      --muted: #666;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Inter', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.7;
+      padding: 0;
+    }
+
+    /* ── Cover ── */
+    .cover {
+      background: linear-gradient(160deg, #0d0d0d 60%, #0a1a10 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 72px 48px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(22,219,101,.04) 39px, rgba(22,219,101,.04) 40px);
+      pointer-events: none;
+    }
+    .cover-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cover-tag::before { content: '//'; opacity: .5; }
+    .cover h1 {
+      font-family: var(--mono);
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -.01em;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .cover h1 span { color: var(--green); }
+    .cover-sub {
+      font-size: 18px;
+      color: var(--muted);
+      margin-top: 16px;
+      max-width: 560px;
+      font-weight: 500;
+    }
+    .cover-meta {
+      margin-top: 36px;
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .cover-meta-item { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+    .cover-meta-item strong { color: var(--text); font-weight: 700; display: block; margin-bottom: 2px; }
+
+    /* ── Layout ── */
+    .page { max-width: 860px; margin: 0 auto; padding: 56px 48px; }
+    @media (max-width: 640px) { .page { padding: 40px 24px; } .cover { padding: 48px 24px 40px; } }
+
+    /* ── Section ── */
+    .section { margin-bottom: 64px; }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .section h2 {
+      font-size: 26px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 16px;
+      letter-spacing: -.01em;
+    }
+    .section p { color: #aaa; margin-bottom: 14px; font-size: 15px; }
+    .section p strong { color: var(--text); }
+
+    /* ── Terminal box ── */
+    .term {
+      background: #0a0a0a;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin: 24px 0;
+      overflow: hidden;
+    }
+    .term-bar {
+      background: #161616;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .term-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .term-dot.r { background: #ff5f57; } .term-dot.y { background: #febc2e; } .term-dot.g { background: #28c840; }
+    .term-title { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: 8px; letter-spacing: .1em; }
+    .term-body { padding: 20px 20px; font-family: var(--mono); font-size: 13px; line-height: 1.8; }
+    .term-body .prompt { color: var(--green); }
+    .term-body .dim { color: var(--muted); }
+    .term-body .hi { color: var(--cyan); }
+    .term-body .warn { color: var(--orange); }
+
+    /* ── Stage timeline ── */
+    .stages { margin: 24px 0; }
+    .stage {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 0 16px;
+      margin-bottom: 0;
+      position: relative;
+    }
+    .stage-num-col { display: flex; flex-direction: column; align-items: center; }
+    .stage-num {
+      width: 36px; height: 36px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 11px; font-weight: 700;
+      color: var(--green);
+      flex-shrink: 0;
+      z-index: 1;
+    }
+    .stage-line { width: 1px; flex: 1; background: var(--border); min-height: 20px; }
+    .stage-content { padding: 4px 0 28px; }
+    .stage-title { font-weight: 800; font-size: 15px; color: #fff; margin-bottom: 4px; }
+    .stage-desc { font-size: 14px; color: #888; line-height: 1.6; }
+    .stage-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 2px;
+      margin-bottom: 6px;
+    }
+    .tag-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(22,219,101,.25); }
+    .tag-cyan { background: rgba(18,216,232,.1); color: var(--cyan); border: 1px solid rgba(18,216,232,.2); }
+    .tag-orange { background: rgba(255,140,0,.1); color: var(--orange); border: 1px solid rgba(255,140,0,.2); }
+    .tag-purple { background: rgba(168,85,247,.1); color: #c084fc; border: 1px solid rgba(168,85,247,.2); }
+
+    /* ── Feature cards ── */
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+    @media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 20px;
+    }
+    .card-icon { font-size: 22px; margin-bottom: 10px; }
+    .card h3 { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .card p { font-size: 13px; color: #888; line-height: 1.6; margin: 0; }
+    .card-url {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--green);
+      margin-top: 10px;
+      opacity: .8;
+    }
+
+    /* ── Roles table ── */
+    .roles { margin: 24px 0; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+    .roles-row { display: grid; grid-template-columns: 160px 1fr; border-bottom: 1px solid var(--border); }
+    .roles-row:last-child { border-bottom: none; }
+    .roles-row.header { background: var(--bg3); }
+    .roles-cell { padding: 12px 16px; font-size: 13px; }
+    .roles-row.header .roles-cell { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+    .role-name { font-weight: 700; color: #fff; margin-bottom: 2px; }
+    .role-tag { font-family: var(--mono); font-size: 10px; color: var(--green); }
+    .roles-cell ul { list-style: none; padding: 0; }
+    .roles-cell ul li { font-size: 13px; color: #888; margin-bottom: 3px; }
+    .roles-cell ul li::before { content: '→ '; color: var(--green); font-family: var(--mono); }
+
+    /* ── How-to steps ── */
+    .steps { counter-reset: step; margin: 24px 0; }
+    .step { display: flex; gap: 16px; margin-bottom: 20px; }
+    .step-num {
+      counter-increment: step;
+      width: 28px; height: 28px;
+      background: var(--green-dim);
+      border: 1px solid rgba(22,219,101,.3);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 12px; font-weight: 800;
+      color: var(--green);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-num::before { content: counter(step, decimal-leading-zero); }
+    .step-body h4 { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+    .step-body p { font-size: 13px; color: #888; margin: 0; line-height: 1.6; }
+
+    /* ── Divider ── */
+    hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+    /* ── Footer ── */
+    .doc-footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .doc-footer strong { color: var(--green); }
+  </style>
+</head>
+<body>
+
+<!-- ── Cover ─────────────────────────────────────────────── -->
+<div class="cover">
+  <div class="cover-tag">Platform Documentation</div>
+  <h1>CTRL+ALT+<span>MEDIA</span></h1>
+  <div class="cover-sub">
+    A youth-powered civic media lab for AI literacy, investigative journalism, and alternative information systems.
+  </div>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><strong>Document Type</strong>Platform Overview &amp; User Guide</div>
+    <div class="cover-meta-item"><strong>Audience</strong>Youth journalists, facilitators, educators</div>
+    <div class="cover-meta-item"><strong>Version</strong>1.0 — August 2026</div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ── What is it? ─────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-label">01 — Overview</div>
+    <h2>What is CTRL+ALT+MEDIA?</h2>
+    <p>
+      <strong>CTRL+ALT+MEDIA</strong> is a digital platform built for young people who want to investigate information failures in their communities, verify what's true, and publish accountability journalism that actually reaches decision-makers.
+    </p>
+    <p>
+      The name says it all: <strong>CTRL</strong> — take control of the narrative. <strong>ALT</strong> — build the alternative. <strong>MEDIA</strong> — do it in public.
+    </p>
+    <p>
+      The platform is organized around a structured 7-stage investigative process called <strong>The Reboot Protocol</strong>. Every crew moves through those stages together — from identifying a broken information system, all the way to publishing a verified Media Patch and sending a Power Ping to the people responsible for fixing it.
+    </p>
+
+    <div class="term">
+      <div class="term-bar">
+        <div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div>
+        <div class="term-title">CTRL+ALT+MEDIA :: REBOOT TERMINAL</div>
+      </div>
+      <div class="term-body">
+        <div><span class="prompt">$</span> <span class="hi">system.status</span></div>
+        <div class="dim">  SYSTEM STATUS: INFORMATION FAILURE DETECTED</div>
+        <div class="dim">  PUBLIC RECORD: INCOMPLETE</div>
+        <div class="dim">  ALTERNATIVE NARRATIVE: NOT YET BUILT</div>
+        <div class="dim">  PATCH #001: <span class="warn">UNASSIGNED — WAITING FOR FIRST CREW</span></div>
+        <div>&nbsp;</div>
+        <div><span class="prompt">$</span> <span class="hi">reboot.initialize</span></div>
+        <div class="dim">  → Who's affected? → What's missing? → Who controls the story?</div>
+        <div class="dim">  → Build the evidence. → Ship the patch. → Demand a response.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Who is it for? ──────────────────────────────────── -->
+  <div class="section">
+    <div class="section-label">02 — Audience</div>
+    <h2>Who uses the platform?</h2>
+
+    <div class="roles">
+      <div class="roles-row header">
+        <div class="roles-cell">Role</div>
+        <div class="roles-cell">What they do on the platform</div>
+      </div>
+      <div class="roles-row">
+        <div class="roles-cell">
+          <div class="role-name">Youth Journalists</div>
+          <div class="role-tag">ages 13–24</div>
+        </div>
+        <div class="roles-cell">
+          <ul>
+            <li>Run missions to build media and AI literacy skills</li>
+            <li>Launch Reboot investigations into local information failures</li>
+            <li>Build Evidence Receipts and publish verified Media Patches</li>
+            <li>Send Power Pings to officials and decision-makers</li>
+          </ul>
+        </div>
+      </div>
+      <div class="roles-row">
+        <div class="roles-cell">
+          <div class="role-name">Facilitators</div>
+          <div class="role-tag">educators / mentors</div>
+        </div>
+        <div class="roles-cell">
+          <ul>
+            <li>Guide crews through the Reboot Protocol stages</li>
+            <li>Approve or flag patches in the Admin Panel</li>
+            <li>Track Power Ping responses from institutions</li>
+            <li>Monitor mission progress across their crew</li>
+          </ul>
+        </div>
+      </div>
+      <div class="roles-row">
+        <div class="roles-cell">
+          <div class="role-name">Community Readers</div>
+          <div class="role-tag">public</div>
+        </div>
+        <div class="roles-cell">
+          <ul>
+            <li>Browse verified Media Patches in the public archive</li>
+            <li>Verify, Amplify, or Apply patches in the Reboot Room</li>
+            <li>No account required for reading and responding</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── The Reboot Protocol ─────────────────────────────── -->
+  <div class="section">
+    <div class="section-label">03 — Core Workflow</div>
+    <h2>The 7-Stage Reboot Protocol</h2>
+    <p>
+      Every investigation on the platform moves through seven stages. Each stage has clear deliverables. You cannot publish a Media Patch until you have completed an Evidence Receipt.
+    </p>
+
+    <div class="stages">
+      <div class="stage">
+        <div class="stage-num-col"><div class="stage-num">01</div><div class="stage-line"></div></div>
+        <div class="stage-content">
+          <div class="stage-tag tag-orange">Crash Report</div>
+          <div class="stage-title">Identify the Information Failure</div>
+          <div class="stage-desc">Name the specific way the information system has broken down. What are people not being told? Who is being left out of the story?</div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num-col"><div class="stage-num">02</div><div class="stage-line"></div></div>
+        <div class="stage-content">
+          <div class="stage-tag tag-orange">System Trace</div>
+          <div class="stage-title">Map Who Controls the Story</div>
+          <div class="stage-desc">Trace the flow of information. Which institutions produce it? Which outlets distribute it? Who profits from the current narrative?</div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num-col"><div class="stage-num">03</div><div class="stage-line"></div></div>
+        <div class="stage-content">
+          <div class="stage-tag tag-purple">Red Team Room</div>
+          <div class="stage-title">Challenge Your Own Story</div>
+          <div class="stage-desc">Before you publish, stress-test your evidence. What could you be wrong about? What counterarguments exist? Document your uncertainties honestly.</div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num-col"><div class="stage-num">04</div><div class="stage-line"></div></div>
+        <div class="stage-content">
+          <div class="stage-tag tag-cyan">Build the Patch</div>
+          <div class="stage-title">Create the Alternative Media</div>
+          <div class="stage-desc">Produce your verified counter-narrative — article, photo essay, podcast, data story, community resource guide, or digital zine.</div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num-col"><div class="stage-num">05</div><div class="stage-line"></div></div>
+        <div class="stage-content">
+          <div class="stage-tag tag-cyan">Ship With Receipts</div>
+          <div class="stage-title">File Your Evidence Receipt</div>
+          <div class="stage-desc">Before publishing, document every claim, source, interview, and verification step in the Evidence Receipt Builder. No receipt, no reboot.</div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num-col"><div class="stage-num">06</div><div class="stage-line"></div></div>
+        <div class="stage-content">
+          <div class="stage-tag tag-green">Power Ping</div>
+          <div class="stage-title">Send Evidence to Decision-Makers</div>
+          <div class="stage-desc">Draft three specific questions for the person with power to fix the problem. Send the Power Ping and track whether they respond.</div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num-col"><div class="stage-num">07</div></div>
+        <div class="stage-content">
+          <div class="stage-tag tag-green">Patch Notes</div>
+          <div class="stage-title">Publish Your Media Patch</div>
+          <div class="stage-desc">Your verified patch enters the public archive. Community readers can Verify, Amplify, and Apply it. The institutional response is tracked here.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Key features ────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-label">04 — Platform Features</div>
+    <h2>What's on the platform?</h2>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">🎯</div>
+        <h3>Missions</h3>
+        <p>10 structured skill-building missions across media analysis, investigation, AI literacy, verification, and community research. Each mission has clear objectives, team size, and deliverables.</p>
+        <div class="card-url">/missions</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🛡️</div>
+        <h3>Media Patches Archive</h3>
+        <p>The public record of all published investigations. Browse by topic, media type, community, or verification status. Every patch links to its public Evidence Receipt.</p>
+        <div class="card-url">/media-patches</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📋</div>
+        <h3>Evidence Receipt Builder</h3>
+        <p>A 6-field form for documenting every claim, source, interview, and verification step before a patch is published. Generates a permanent, public, linkable receipt.</p>
+        <div class="card-url">/evidence-receipt</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📡</div>
+        <h3>Power Ping Tracker</h3>
+        <p>Log outreach to officials and institutions. Record the three questions sent, set a response deadline, and track whether they responded, promised action, or went silent.</p>
+        <div class="card-url">/power-ping</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">💬</div>
+        <h3>Reboot Room</h3>
+        <p>Community response space for published patches. Readers can Verify (confirm accuracy), Amplify (share with context), or Apply (commit to using the information).</p>
+        <div class="card-url">/reboot-room</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔍</div>
+        <h3>Search</h3>
+        <p>Search across all Media Patches and Missions simultaneously — by title, topic, community name, or skills. Results are instant, no account required.</p>
+        <div class="card-url">/search</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>Dashboard</h3>
+        <p>Personal workspace for logged-in crew members. Shows mission progress, recent power pings, evidence receipts filed, and crew profile. First member gets the Founding Crew badge.</p>
+        <div class="card-url">/dashboard</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔐</div>
+        <h3>Admin / Facilitator Panel</h3>
+        <p>Review queue for submitted patches — approve, flag, or dispute. Track all power pings across the crew. Mark institutional responses. Overview stats at a glance.</p>
+        <div class="card-url">/admin</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Getting started ─────────────────────────────────── -->
+  <div class="section">
+    <div class="section-label">05 — Getting Started</div>
+    <h2>How to use the platform</h2>
+
+    <p><strong>For youth journalists starting their first investigation:</strong></p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>Create an account</h4>
+          <p>Click <em>Start Reboot</em> in the navigation bar. Sign up with email or Google. The first person to join earns the <strong>Founding Crew</strong> badge permanently.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>Set up your crew profile</h4>
+          <p>Go to your Dashboard and add your display name, crew name, and bio. This appears publicly alongside your published patches.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>Pick a mission to build your skills</h4>
+          <p>Visit <em>Missions</em> and start with a Beginner mission like <strong>Headline Autopsy</strong> or <strong>Search Yourself</strong>. Complete the deliverables with your crew and mark it complete in your Dashboard.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>Launch a Reboot investigation</h4>
+          <p>Click <em>+ New Reboot</em> and complete the 4-step intake form. This creates your project and places it at Stage 01 (Crash Report) of the Reboot Protocol.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>Work through the 7 stages</h4>
+          <p>Follow the Reboot Protocol on the <em>Reboot Protocol</em> page. Use the Evidence Receipt Builder before you publish. File a Power Ping at Stage 06.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>Publish your Media Patch</h4>
+          <p>Once your facilitator approves the patch in the Admin Panel, it enters the public archive at <em>Media Patches</em>. Community readers can Verify, Amplify, and Apply it in the Reboot Room.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <p><strong>For community readers (no account needed):</strong></p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>Browse the Media Patches archive</h4>
+          <p>Go to <em>/media-patches</em> to see all published investigations. Filter by topic or media type.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>Respond in the Reboot Room</h4>
+          <p>Visit <em>/reboot-room</em> to Verify a patch (confirm its accuracy from your experience), Amplify it (add context and share), or Apply it (commit to using the information in your own work or community).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>Check the Evidence Receipt</h4>
+          <p>Every published patch links to its public Evidence Receipt — a complete record of every claim and source. If something seems off, note it in your Reboot Room response.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── The 10 Missions ─────────────────────────────────── -->
+  <div class="section">
+    <div class="section-label">06 — Missions Reference</div>
+    <h2>The 10 Missions</h2>
+    <p>Missions are skill-building investigations with defined deliverables. Each one produces real work that can feed into a larger Reboot investigation.</p>
+
+    <div class="term">
+      <div class="term-bar">
+        <div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div>
+        <div class="term-title">MISSION DIRECTORY :: v1.0</div>
+      </div>
+      <div class="term-body">
+        <div><span class="dim">[BEGINNER]</span>  <span class="hi">Headline Autopsy</span>          <span class="dim">— analysis</span></div>
+        <div><span class="dim">[BEGINNER]</span>  <span class="hi">Public Document Decoder</span>   <span class="dim">— translation</span></div>
+        <div><span class="dim">[BEGINNER]</span>  <span class="hi">Search Yourself</span>            <span class="dim">— ai-literacy</span></div>
+        <div>&nbsp;</div>
+        <div><span class="dim">[INTERMEDIATE]</span> <span class="warn">Missing From the Record</span>   <span class="dim">— investigation</span></div>
+        <div><span class="dim">[INTERMEDIATE]</span> <span class="warn">Rumor System Trace</span>        <span class="dim">— verification</span></div>
+        <div><span class="dim">[INTERMEDIATE]</span> <span class="warn">Who Gets Quoted?</span>          <span class="dim">— analysis</span></div>
+        <div><span class="dim">[INTERMEDIATE]</span> <span class="warn">AI Said What?</span>             <span class="dim">— ai-literacy</span></div>
+        <div><span class="dim">[INTERMEDIATE]</span> <span class="warn">Information Desert Map</span>    <span class="dim">— investigation</span></div>
+        <div>&nbsp;</div>
+        <div><span class="dim">[ADVANCED]</span>  <span class="prompt">Algorithm Audit</span>            <span class="dim">— ai-literacy</span></div>
+        <div><span class="dim">[ADVANCED]</span>  <span class="prompt">The Correction Project</span>     <span class="dim">— verification</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Key principles ──────────────────────────────────── -->
+  <div class="section">
+    <div class="section-label">07 — Platform Principles</div>
+    <h2>How we do journalism here</h2>
+
+    <div class="cards">
+      <div class="card">
+        <h3>No receipt, no reboot</h3>
+        <p>Every published patch requires a completed Evidence Receipt. Transparency about sources, verification steps, and uncertainties is not optional — it is the product.</p>
+      </div>
+      <div class="card">
+        <h3>Zero starts honestly</h3>
+        <p>The platform launches empty. No fake stats or sample patches. Patch #001 is genuinely unassigned. The archive starts the day the first crew publishes their first investigation.</p>
+      </div>
+      <div class="card">
+        <h3>Power must respond</h3>
+        <p>A Media Patch without a Power Ping is incomplete. Every published investigation includes three specific questions sent directly to the person with the power to fix the problem.</p>
+      </div>
+      <div class="card">
+        <h3>Safety is non-negotiable</h3>
+        <p>Each mission and investigation includes safety notes. Youth journalists never identify private individuals without consent and never put personal information into AI tools.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Tech stack ──────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-label">08 — Technical Reference</div>
+    <h2>Platform architecture (for facilitators &amp; developers)</h2>
+
+    <div class="term">
+      <div class="term-bar">
+        <div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div>
+        <div class="term-title">STACK TRACE</div>
+      </div>
+      <div class="term-body">
+        <div><span class="prompt">frontend</span>    <span class="dim">React 18 + Vite · Tailwind CSS · Wouter routing · TanStack Query</span></div>
+        <div><span class="prompt">backend</span>     <span class="dim">Node.js + Express · TypeScript · Drizzle ORM</span></div>
+        <div><span class="prompt">database</span>    <span class="dim">PostgreSQL (Neon) — 8 tables</span></div>
+        <div><span class="prompt">auth</span>        <span class="dim">Clerk (email + Google OAuth) · session cookies · server middleware</span></div>
+        <div>&nbsp;</div>
+        <div><span class="dim">tables:</span></div>
+        <div><span class="dim">  media_patches        — published investigations</span></div>
+        <div><span class="dim">  reboot_projects      — in-progress investigations</span></div>
+        <div><span class="dim">  user_profiles        — crew accounts linked to Clerk</span></div>
+        <div><span class="dim">  mission_progress     — per-user mission tracking</span></div>
+        <div><span class="dim">  power_pings          — institutional outreach log</span></div>
+        <div><span class="dim">  evidence_receipts    — public claim documentation</span></div>
+        <div><span class="dim">  reboot_room_responses — verify / amplify / apply</span></div>
+        <div><span class="dim">  contacts             — facilitator/partner inquiries</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Footer ─────────────────────────────────────────────── -->
+<div class="doc-footer">
+  <div><strong>CTRL+ALT+MEDIA</strong> — Platform Overview v1.0 — August 2026</div>
+  <div style="color:#444">The public record has crashed. Youth reboot it.</div>
+</div>
+
+</body>
+</html>

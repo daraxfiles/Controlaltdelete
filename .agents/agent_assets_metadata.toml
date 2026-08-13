@@ -24,3 +24,10 @@ id = "Hpu8WOej9itqL9j3zqnxx"
 uri = "file://artifacts/mockup-sandbox/public/images/videos-banner.jpg"
 type = "image"
 title = "cinematic film camera lens dark dramatic lighting"
+
+[[outputs]]
+id = "kFSd1WldpkCga5lOuHPjZ"
+uri = "file://docs/platform-overview.html"
+type = "text"
+title = "CTRL+ALT+MEDIA — Platform Overview"
+description = "Full summary of the platform: what it is, who it's for, the 7-stage Reboot Protocol, all 8 tools, the 10 missions, and a step-by-step guide for youth journalists, facilitators, and community readers."
