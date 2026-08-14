@@ -1,34 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Users, Shield, Zap, Clock } from "lucide-react";
+import { ArrowRight, Users, Shield, Zap, Clock, Terminal } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const SAMPLE_CREWS = [
-  {
-    name: "Transit Truth Crew",
-    community: "Southside School District",
-    members: 5,
-    project: "The Bus Route Blackout",
-    stage: "Red Team Room",
-    status: "active",
-  },
-  {
-    name: "The Record Crew",
-    community: "Riverside Neighborhood",
-    members: 4,
-    project: "What the Headline Left Out",
-    stage: "Patch Notes",
-    status: "published",
-  },
-  {
-    name: "Archive Reboots",
-    community: "Eastbrook Community",
-    members: 6,
-    project: "AI Does Not Know Our History",
-    stage: "Power Ping",
-    status: "active",
-  },
-];
 
 const CREW_ROLES = [
   { role: "Crew Lead", desc: "Creates the project, assigns responsibilities, and submits work for review." },
@@ -43,6 +16,7 @@ export default function RebootCrews() {
   return (
     <main className="pt-24 min-h-screen bg-background">
       <div className="container mx-auto max-w-5xl px-6 py-12">
+
         {/* Header */}
         <p className="system-label mb-4">Collaborative Teams</p>
         <h1 className="font-black font-mono text-4xl md:text-5xl text-[hsl(var(--foreground))] mb-4 leading-tight">
@@ -95,34 +69,37 @@ export default function RebootCrews() {
           </div>
         </section>
 
-        {/* Active crews */}
+        {/* Active crews — honest empty state */}
         <section className="mb-16">
           <p className="system-label mb-6">Active Crews</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {SAMPLE_CREWS.map((crew) => (
-              <div key={crew.name} className="border border-[hsl(var(--border))] bg-[hsl(var(--card))] rounded-sm overflow-hidden card-accent-primary">
-                <div className="bg-[hsl(0_0%_6%)] px-4 py-2.5 border-b border-[hsl(var(--border))] flex items-center justify-between">
-                  <span className={cn(
-                    "px-2 py-0.5 rounded-sm text-[10px] font-mono font-bold tracking-wide",
-                    crew.status === "published" ? "badge-verified" : "badge-progress"
-                  )}>
-                    {crew.status === "published" ? "Published" : "Active"}
-                  </span>
-                  <span className="font-mono text-[10px] text-[hsl(var(--muted-foreground)/0.4)]">
-                    {crew.members} members
-                  </span>
-                </div>
-                <div className="p-5">
-                  <h3 className="font-mono font-black text-sm text-[hsl(var(--foreground))] mb-1">{crew.name}</h3>
-                  <p className="font-mono text-[10px] text-[hsl(var(--muted-foreground)/0.7)] mb-3">{crew.community}</p>
-                  <p className="text-xs text-[hsl(var(--foreground)/0.7)] mb-3">{crew.project}</p>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] text-[hsl(var(--muted-foreground)/0.5)] uppercase tracking-widests">Stage:</span>
-                    <span className="font-mono text-[10px] text-[hsl(var(--accent))]">{crew.stage}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="terminal-box">
+            <div className="terminal-header">
+              <Terminal className="h-3 w-3 text-[hsl(var(--primary)/0.6)]" />
+              <span className="font-mono text-[10px] text-[hsl(var(--muted-foreground))] tracking-widest">
+                CREW REGISTRY :: QUERY
+              </span>
+            </div>
+            <div className="p-6 font-mono text-sm space-y-1.5">
+              <p>
+                <span className="text-[hsl(var(--primary)/0.6)]">$</span>{" "}
+                <span className="text-[hsl(var(--foreground)/0.5)]">SELECT * FROM reboot_crews WHERE status = 'active';</span>
+              </p>
+              <p className="text-[hsl(var(--muted-foreground)/0.5)] pl-4">
+                — 0 rows returned
+              </p>
+              <p className="text-[hsl(var(--muted-foreground)/0.5)] pl-4">
+                — CREW #001 IS UNASSIGNED
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6 border border-dashed border-[hsl(var(--border))] rounded-sm p-10 text-center">
+            <p className="font-mono text-sm text-[hsl(var(--muted-foreground))] mb-1">
+              No crews have launched yet.
+            </p>
+            <p className="font-mono text-xs text-[hsl(var(--muted-foreground)/0.45)] max-w-xs mx-auto leading-relaxed">
+              The first crew to start a Reboot Project will appear here. That crew could be yours.
+            </p>
           </div>
         </section>
 
@@ -136,17 +113,18 @@ export default function RebootCrews() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link href="/create">
-              <Button className="rounded-none bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] font-mono font-bold text-xs tracking-widests uppercase hover:bg-[hsl(var(--primary)/0.85)]">
+              <Button className="rounded-none bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] font-mono font-bold text-xs tracking-widest uppercase hover:bg-[hsl(var(--primary)/0.85)]">
                 Start a Project <ArrowRight className="ml-2 h-3 w-3" />
               </Button>
             </Link>
             <Link href="/sign-up">
-              <Button variant="ghost" className="rounded-none border border-[hsl(var(--border))] font-mono text-xs tracking-widests uppercase hover:border-[hsl(var(--primary)/0.4)]">
+              <Button variant="ghost" className="rounded-none border border-[hsl(var(--border))] font-mono text-xs tracking-widest uppercase hover:border-[hsl(var(--primary)/0.4)]">
                 Create Account
               </Button>
             </Link>
           </div>
         </div>
+
       </div>
     </main>
   );
