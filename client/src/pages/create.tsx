@@ -83,14 +83,14 @@ export default function Create() {
             Your Reboot Project has been submitted. Sign in to access your full project workspace and invite your crew.
           </p>
           <div className="flex flex-col gap-3">
-            <Link href="/sign-in">
+            <Link href="/dashboard">
               <Button className="w-full rounded-none bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] font-mono font-bold text-xs tracking-widests uppercase hover:bg-[hsl(var(--primary)/0.85)]">
-                Sign In to Continue <ArrowRight className="ml-2 h-3 w-3" />
+                Go to Dashboard <ArrowRight className="ml-2 h-3 w-3" />
               </Button>
             </Link>
-            <Link href="/dashboard">
+            <Link href="/reboot-protocol">
               <Button variant="ghost" className="w-full rounded-none border border-[hsl(var(--border))] font-mono text-xs tracking-widests uppercase">
-                View Demo Dashboard
+                Review the Reboot Protocol
               </Button>
             </Link>
           </div>
