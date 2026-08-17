@@ -53,9 +53,15 @@ export const userProfiles = pgTable("user_profiles", {
   displayName: text("display_name").notNull(),
   crewName: text("crew_name"),
   bio: text("bio"),
-  role: text("role").default("learner").notNull(), // student | facilitator | admin
+  role: text("role").default("learner").notNull(), // learner | facilitator | admin
   foundingCrew: boolean("founding_crew").default(false).notNull(),
   language: text("language").default("en").notNull(), // en | es
+  // ── Gamification ──────────────────────────────────────────────────────
+  xp: integer("xp").default(0).notNull(),
+  currentStreak: integer("current_streak").default(0).notNull(),
+  longestStreak: integer("longest_streak").default(0).notNull(),
+  lastActiveDate: text("last_active_date"), // ISO date string YYYY-MM-DD
+  badges: text("badges").array().default([]).notNull(), // array of badge keys
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

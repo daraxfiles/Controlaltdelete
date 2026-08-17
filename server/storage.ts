@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
 import { db } from "./db";
 import {
   mediaPatches,
@@ -17,6 +17,7 @@ import {
   type Contact,
   type InsertContact,
 } from "@shared/schema";
+import { XP_AWARDS, computeEarnedBadges, type XpEvent } from "@shared/gamification";
 
 export class DatabaseStorage {
   // ── Media Patches ──────────────────────────────────────────────────────
@@ -109,6 +110,73 @@ export class DatabaseStorage {
   async getAllUserProfiles() {
     if (!db) return [];
     return db.select().from(userProfiles).orderBy(desc(userProfiles.createdAt));
+  }
+
+  // ── Gamification ──────────────────────────────────────────────────────────
+
+  async awardXp(clerkUserId: string, event: XpEvent) {
+    if (!db) return;
+    const amount = XP_AWARDS[event];
+    await db.update(userProfiles)
+      .set({ xp: sql`${userProfiles.xp} + ${amount}` })
+      .where(eq(userProfiles.clerkUserId, clerkUserId));
+    await this.syncBadges(clerkUserId);
+  }
+
+  async touchStreak(clerkUserId: string) {
+    if (!db) return;
+    const profile = await this.getUserProfile(clerkUserId);
+    if (!profile) return;
+
+    const today = new Date().toISOString().slice(0, 10);
+    if (profile.lastActiveDate === today) return; // already counted today
+
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    const isConsecutive = profile.lastActiveDate === yesterday;
+    const newStreak = isConsecutive ? (profile.currentStreak ?? 0) + 1 : 1;
+    const longest = Math.max(profile.longestStreak ?? 0, newStreak);
+
+    await db.update(userProfiles).set({
+      currentStreak: newStreak,
+      longestStreak: longest,
+      lastActiveDate: today,
+      xp: sql`${userProfiles.xp} + ${XP_AWARDS.daily_streak}`,
+    }).where(eq(userProfiles.clerkUserId, clerkUserId));
+
+    await this.syncBadges(clerkUserId);
+  }
+
+  async syncBadges(clerkUserId: string) {
+    if (!db) return;
+    const profile = await this.getUserProfile(clerkUserId);
+    if (!profile) return;
+
+    const [missionsRows, pingsRows, receiptsRows, patchesRows] = await Promise.all([
+      db.select().from(missionProgress).where(eq(missionProgress.clerkUserId, clerkUserId)),
+      db.select().from(powerPings).where(eq(powerPings.clerkUserId, clerkUserId)),
+      db.select().from(evidenceReceipts).where(eq(evidenceReceipts.clerkUserId, clerkUserId)),
+      db.select().from(mediaPatches),
+    ]);
+
+    const respondedPings = pingsRows.filter(p => ["responded", "action_promised"].includes(p.status ?? "")).length;
+    const completedMissions = missionsRows.filter(m => m.status === "completed").length;
+
+    const earned = computeEarnedBadges({
+      missionsCompleted: completedMissions,
+      evidenceReceipts: receiptsRows.length,
+      powerPings: pingsRows.length,
+      respondedPings,
+      mediaPatches: patchesRows.length,
+      currentStreak: profile.currentStreak ?? 0,
+      foundingCrew: profile.foundingCrew,
+    });
+
+    // Merge with existing so we never remove a badge
+    const existing = profile.badges ?? [];
+    const merged = Array.from(new Set([...existing, ...earned]));
+    if (merged.length !== existing.length) {
+      await db.update(userProfiles).set({ badges: merged }).where(eq(userProfiles.clerkUserId, clerkUserId));
+    }
   }
 
   // ── Mission Progress ───────────────────────────────────────────────────
