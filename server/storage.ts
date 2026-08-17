@@ -252,16 +252,42 @@ export class DatabaseStorage {
 
   async createRebootRoomResponse(data: { patchId: string; clerkUserId?: string; action: string; comment?: string; location?: string; isAnonymous?: boolean }) {
     if (!db) throw new Error("Database not available.");
-    const [response] = await db.insert(rebootRoomResponses).values({ id: randomUUID(), ...data }).returning();
+    const [response] = await db.insert(rebootRoomResponses).values({ id: randomUUID(), status: "pending", ...data }).returning();
     return response;
   }
 
+  /** Returns approved aggregate counts only — safe for public consumption. Never returns raw rows, user IDs, or content. */
+  async getRebootRoomResponseCounts(patchId: string): Promise<{ verify: number; amplify: number; apply: number }> {
+    if (!db) return { verify: 0, amplify: 0, apply: 0 };
+    const rows = await db
+      .select()
+      .from(rebootRoomResponses)
+      .where(eq(rebootRoomResponses.patchId, patchId));
+    const approved = rows.filter(r => r.status === "approved");
+    return {
+      verify: approved.filter(r => r.action === "verify").length,
+      amplify: approved.filter(r => r.action === "amplify").length,
+      apply: approved.filter(r => r.action === "apply").length,
+    };
+  }
+
+  /** Admin-only: returns full rows for facilitator moderation review. */
   async getRebootRoomResponses(patchId?: string) {
     if (!db) return [];
     if (patchId) {
       return db.select().from(rebootRoomResponses).where(eq(rebootRoomResponses.patchId, patchId)).orderBy(desc(rebootRoomResponses.createdAt));
     }
     return db.select().from(rebootRoomResponses).orderBy(desc(rebootRoomResponses.createdAt));
+  }
+
+  async updateRebootRoomResponseStatus(id: string, status: "pending" | "approved" | "rejected") {
+    if (!db) return undefined;
+    const [row] = await db
+      .update(rebootRoomResponses)
+      .set({ status })
+      .where(eq(rebootRoomResponses.id, id))
+      .returning();
+    return row;
   }
 
   // ── Legacy aliases ─────────────────────────────────────────────────────

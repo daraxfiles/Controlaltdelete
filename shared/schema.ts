@@ -118,6 +118,7 @@ export const rebootRoomResponses = pgTable("reboot_room_responses", {
   comment: text("comment"),
   location: text("location"), // for "apply" — where they'll use it
   isAnonymous: boolean("is_anonymous").default(false).notNull(),
+  status: text("status").default("pending").notNull(), // pending | approved | rejected
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUser } from "@clerk/react";
 import { Button } from "@/components/ui/button";
 import { Shield, Volume2, Zap, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -12,6 +13,9 @@ const ACTIONS = [
     icon: Shield,
     color: "hsl(var(--primary))",
     desc: "Offer evidence, expertise, or corrections that strengthen or challenge this patch.",
+    placeholder: "Add evidence, expertise, or a correction (optional)...",
+    inputLabel: null,
+    requiresText: false,
   },
   {
     id: "amplify",
@@ -19,6 +23,9 @@ const ACTIONS = [
     icon: Volume2,
     color: "hsl(var(--accent))",
     desc: "Help this project reach a wider audience — share it, cite it, or connect the crew to decision-makers.",
+    placeholder: "Describe how you'll amplify this patch...",
+    inputLabel: "How will you amplify this?",
+    requiresText: true,
   },
   {
     id: "apply",
@@ -26,13 +33,76 @@ const ACTIONS = [
     icon: Zap,
     color: "hsl(var(--warning))",
     desc: "Commit to taking a concrete action based on what this crew documented.",
+    placeholder: "Where will you use this? Describe your commitment...",
+    inputLabel: "Where will you use this?",
+    requiresText: true,
   },
 ];
 
+type ResponseCounts = { verify: number; amplify: number; apply: number };
 function AudienceCard({ patch }: { patch: MediaPatch }) {
+  const { user } = useUser();
+  const queryClient = useQueryClient();
   const [chosen, setChosen] = useState<string | null>(null);
-  const [commitment, setCommitment] = useState("");
+  const [text, setText] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submittedAction, setSubmittedAction] = useState<string | null>(null);
+
+  const { data: counts } = useQuery<ResponseCounts>({
+    queryKey: ["/api/reboot-room/responses", patch.id],
+    queryFn: async () => {
+      const res = await fetch(`/api/reboot-room/responses/${patch.id}`);
+      if (!res.ok) throw new Error("Failed to fetch response counts");
+      return res.json();
+    },
+    staleTime: 30_000,
+  });
+
+  const totalCount = counts ? counts.verify + counts.amplify + counts.apply : 0;
+  const countFor = (action: string): number => counts ? (counts as Record<string, number>)[action] ?? 0 : 0;
+
+  const mutation = useMutation({
+    mutationFn: async (body: Record<string, string | boolean>) => {
+      const res = await fetch("/api/reboot-room/respond", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error ?? "Failed to submit response");
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/reboot-room/responses", patch.id] });
+      setSubmittedAction(chosen);
+      setSubmitted(true);
+    },
+  });
+
+  const handleSubmit = () => {
+    if (!chosen) return;
+    const action = ACTIONS.find(a => a.id === chosen);
+    if (!action) return;
+    if (action.requiresText && !text.trim()) return;
+
+    const body: Record<string, string | boolean> = {
+      patchId: patch.id,
+      action: chosen,
+      isAnonymous: !user,
+    };
+    if (chosen === "apply") {
+      body.location = text.trim();
+    } else if (text.trim()) {
+      body.comment = text.trim();
+    }
+
+    mutation.mutate(body);
+  };
+
+  const selectedAction = ACTIONS.find(a => a.id === chosen);
+  const canSubmit = !!chosen && (!selectedAction?.requiresText || text.trim().length > 0);
 
   return (
     <div className="border border-[hsl(var(--border))] bg-[hsl(var(--card))] rounded-sm overflow-hidden card-accent-primary">
@@ -53,13 +123,28 @@ function AudienceCard({ patch }: { patch: MediaPatch }) {
         <p className="font-mono text-[10px] text-[hsl(var(--accent)/0.8)] uppercase tracking-wide mb-3">
           {patch.topic}
         </p>
-        <p className="text-sm text-[hsl(var(--muted-foreground))] leading-relaxed mb-6">
+        <p className="text-sm text-[hsl(var(--muted-foreground))] leading-relaxed mb-4">
           {patch.description}
         </p>
 
+        {/* Live approved response counts */}
+        {totalCount > 0 && (
+          <div className="flex items-center gap-4 mb-5 pb-4 border-b border-[hsl(var(--border))]">
+            {ACTIONS.map(a => (
+              <ActionCount
+                key={a.id}
+                count={countFor(a.id)}
+                icon={a.icon}
+                color={a.color}
+                label={a.label}
+              />
+            ))}
+          </div>
+        )}
+
         {!submitted ? (
           <>
-            <p className="font-mono text-[10px] tracking-widests uppercase text-[hsl(var(--muted-foreground)/0.6)] mb-3">
+            <p className="font-mono text-[10px] tracking-widest uppercase text-[hsl(var(--muted-foreground)/0.6)] mb-3">
               Choose your response:
             </p>
             <div className="grid grid-cols-3 gap-2 mb-4">
@@ -68,7 +153,10 @@ function AudienceCard({ patch }: { patch: MediaPatch }) {
                 return (
                   <button
                     key={action.id}
-                    onClick={() => setChosen(chosen === action.id ? null : action.id)}
+                    onClick={() => {
+                      setChosen(chosen === action.id ? null : action.id);
+                      setText("");
+                    }}
                     className={cn(
                       "flex flex-col items-center gap-2 py-3 px-2 border rounded-sm transition-all text-center",
                       chosen === action.id
@@ -93,29 +181,40 @@ function AudienceCard({ patch }: { patch: MediaPatch }) {
               })}
             </div>
 
-            {chosen && (
+            {chosen && selectedAction && (
               <div className="mb-4">
-                <p className="text-xs text-[hsl(var(--muted-foreground))] mb-2 leading-relaxed">
-                  {ACTIONS.find(a => a.id === chosen)?.desc}
+                <p className="text-xs text-[hsl(var(--muted-foreground))] mb-3 leading-relaxed">
+                  {selectedAction.desc}
                 </p>
+                {selectedAction.inputLabel && (
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-[hsl(var(--muted-foreground)/0.7)] mb-1.5">
+                    {selectedAction.inputLabel}
+                  </p>
+                )}
                 <textarea
-                  value={commitment}
-                  onChange={e => setCommitment(e.target.value)}
-                  placeholder={chosen === "apply" ? "Describe the action you are committing to..." : "Add your comment, evidence, or commitment..."}
+                  value={text}
+                  onChange={e => setText(e.target.value)}
+                  placeholder={selectedAction.placeholder}
                   className="w-full bg-[hsl(var(--input))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] text-sm p-3 rounded-sm resize-none focus:outline-none focus:border-[hsl(var(--primary)/0.5)] font-mono placeholder:text-[hsl(var(--muted-foreground)/0.5)]"
                   rows={3}
-                  aria-label="Your response"
+                  aria-label={selectedAction.inputLabel ?? "Your response (optional)"}
                 />
               </div>
             )}
 
+            {mutation.isError && (
+              <p className="text-xs text-red-400 font-mono mb-3">
+                {(mutation.error as Error)?.message ?? "Something went wrong. Please try again."}
+              </p>
+            )}
+
             {chosen && (
               <Button
-                onClick={() => { if (commitment.trim()) setSubmitted(true); }}
-                disabled={!commitment.trim()}
-                className="w-full rounded-none bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] font-mono font-bold text-xs tracking-widests uppercase hover:bg-[hsl(var(--primary)/0.85)] disabled:opacity-40"
+                onClick={handleSubmit}
+                disabled={!canSubmit || mutation.isPending}
+                className="w-full rounded-none bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] font-mono font-bold text-xs tracking-widest uppercase hover:bg-[hsl(var(--primary)/0.85)] disabled:opacity-40"
               >
-                Submit Response
+                {mutation.isPending ? "Submitting…" : "Submit Response"}
               </Button>
             )}
           </>
@@ -123,7 +222,7 @@ function AudienceCard({ patch }: { patch: MediaPatch }) {
           <div className="border border-[hsl(var(--primary)/0.3)] bg-[hsl(var(--primary)/0.06)] rounded-sm p-4 text-center">
             <p className="font-mono font-bold text-sm text-[hsl(var(--primary))] mb-1">Response Submitted</p>
             <p className="font-mono text-xs text-[hsl(var(--muted-foreground))]">
-              Your {chosen} response will be reviewed by a facilitator before being added to the public record.
+              Your {submittedAction} response will be reviewed by a facilitator before being added to the public record.
             </p>
           </div>
         )}
@@ -202,5 +301,16 @@ export default function RebootRoom() {
         </div>
       </div>
     </main>
+  );
+}
+
+function ActionCount({ count, icon: Icon, color, label }: { count: number; icon: React.ElementType; color: string; label: string }) {
+  return (
+    <div className="flex items-center gap-1.5">
+      <Icon className="h-3 w-3" style={{ color }} />
+      <span className="font-mono text-[10px] text-[hsl(var(--muted-foreground))]">
+        <span className="font-bold" style={{ color }}>{count}</span> {label}
+      </span>
+    </div>
   );
 }

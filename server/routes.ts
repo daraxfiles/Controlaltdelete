@@ -215,29 +215,55 @@ export async function registerRoutes(
   });
 
   // ── Reboot Room Responses ──────────────────────────────────────────────
+  const VALID_ACTIONS = ["verify", "amplify", "apply"] as const;
+  type RebootAction = typeof VALID_ACTIONS[number];
+
   app.post("/api/reboot-room/respond", async (req, res) => {
     try {
       const auth = getAuth(req);
-      const { patchId, action, comment, location, isAnonymous } = req.body;
-      if (!patchId || !action) return res.status(400).json({ error: "patchId and action required" });
+      const { patchId, action, comment, location } = req.body;
+
+      // Server-side validation
+      if (!patchId || typeof patchId !== "string") {
+        return res.status(400).json({ error: "patchId is required" });
+      }
+      if (!action || !VALID_ACTIONS.includes(action as RebootAction)) {
+        return res.status(400).json({ error: "action must be one of: verify, amplify, apply" });
+      }
+      if (action === "amplify" && (!comment || typeof comment !== "string" || !comment.trim())) {
+        return res.status(400).json({ error: "comment is required for amplify" });
+      }
+      if (action === "apply" && (!location || typeof location !== "string" || !location.trim())) {
+        return res.status(400).json({ error: "location is required for apply" });
+      }
+
+      // Verify the patch exists
+      const patch = await storage.getMediaPatch(patchId);
+      if (!patch) return res.status(404).json({ error: "Patch not found" });
+
+      const isAuthenticated = !!auth?.userId;
       const response = await storage.createRebootRoomResponse({
         patchId,
-        clerkUserId: auth?.userId ?? undefined,
+        clerkUserId: isAuthenticated ? auth!.userId : undefined,
         action,
-        comment,
-        location,
-        isAnonymous: isAnonymous ?? !auth?.userId,
+        comment: comment?.trim() || undefined,
+        location: location?.trim() || undefined,
+        isAnonymous: !isAuthenticated,
       });
-      if (auth?.userId) await storage.awardXp(auth.userId, "reboot_response");
-      res.status(201).json(response);
+
+      if (isAuthenticated) await storage.awardXp(auth!.userId, "reboot_response");
+
+      // Return a minimal safe response — no clerkUserId, no sensitive fields
+      res.status(201).json({ id: response.id, action: response.action, status: response.status });
     } catch {
       res.status(500).json({ error: "Failed to submit response" });
     }
   });
 
+  /** Public endpoint — returns only approved aggregate counts, never raw rows or user data. */
   app.get("/api/reboot-room/responses/:patchId", async (req, res) => {
     try {
-      res.json(await storage.getRebootRoomResponses(req.params.patchId));
+      res.json(await storage.getRebootRoomResponseCounts(req.params.patchId));
     } catch {
       res.status(500).json({ error: "Failed to fetch responses" });
     }
