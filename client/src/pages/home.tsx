@@ -349,10 +349,10 @@ export default function Home() {
 
           <div className="border-l-2 border-[hsl(var(--primary)/0.5)] pl-5 mb-10 max-w-2xl">
             <p className="text-[hsl(var(--foreground))] text-xl md:text-2xl font-bold leading-snug mb-2">
-              The public record has crashed. Students reboot it.
+              The public record has crashed. Learners reboot it.
             </p>
             <p className="text-[hsl(var(--muted-foreground))] text-sm md:text-base leading-relaxed">
-              CTRL+ALT+MEDIA is a student-powered creative technology and civic media lab. Undergraduate journalists and researchers investigate failures in the information system, build verified alternatives, and take their work directly to the people with the power to respond.
+              CTRL+ALT+MEDIA is a learner-powered creative technology and civic media lab. Undergraduate journalists and researchers investigate failures in the information system, build verified alternatives, and take their work directly to the people with the power to respond.
             </p>
           </div>
 
@@ -401,14 +401,14 @@ export default function Home() {
               {
                 key: "CTRL",
                 tagline: "Reclaim control of the narrative.",
-                desc: "Students don't just consume information — they trace its origins, challenge its framers, and reclaim the power to define what gets counted as truth.",
+                desc: "Learners don't just consume information — they trace its origins, challenge its framers, and reclaim the power to define what gets counted as truth.",
                 color: "hsl(var(--primary))",
                 accent: "card-accent-primary",
               },
               {
                 key: "ALT",
                 tagline: "Build the alternative that was missing.",
-                desc: "When the information system fails — through silence, distortion, or exclusion — students build the story that should have existed.",
+                desc: "When the information system fails — through silence, distortion, or exclusion — learners build the story that should have existed.",
                 color: "hsl(var(--accent))",
                 accent: "card-accent-accent",
               },
@@ -612,12 +612,12 @@ export default function Home() {
             <div>
               <p className="system-label mb-4">Why This Matters</p>
               <h2 className="text-3xl md:text-4xl font-black font-mono text-[hsl(var(--foreground))] mb-6 leading-tight">
-                Students should not only{" "}
+                Learners should not only{" "}
                 <span className="text-[hsl(var(--muted-foreground))] line-through decoration-[hsl(var(--destructive))]">consume</span>{" "}
                 media critically.
               </h2>
               <p className="text-[hsl(var(--muted-foreground))] leading-relaxed mb-6">
-                They should gain the skills, tools, confidence, and public platform to reshape the information systems affecting their communities. CTRL+ALT+MEDIA equips undergraduate students not just to read the system — but to rewrite it.
+                They should gain the skills, tools, confidence, and public platform to reshape the information systems affecting their communities. CTRL+ALT+MEDIA equips undergraduate learners not just to read the system — but to rewrite it.
               </p>
               <div className="space-y-3">
                 {[

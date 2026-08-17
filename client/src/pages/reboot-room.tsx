@@ -148,7 +148,7 @@ export default function RebootRoom() {
           The Reboot Room
         </h1>
         <p className="text-[hsl(var(--muted-foreground))] max-w-xl mb-12 leading-relaxed">
-          Selected student investigations, open to the public. Read the work. Add your expertise. Commit to action. Every verified response is added to the patch's public record.
+          Selected learner investigations, open to the public. Read the work. Add your expertise. Commit to action. Every verified response is added to the patch's public record.
         </p>
 
         {/* Action legend */}
@@ -195,7 +195,7 @@ export default function RebootRoom() {
             <div>
               <p className="font-mono font-bold text-xs text-[hsl(var(--foreground))] mb-1 tracking-wide">Moderation Notice</p>
               <p className="text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
-                All audience responses are moderated by a facilitator before being added to the public record. Responses that contain harmful content, personal attacks, or unverified claims will not be published. Student profiles are private by default.
+                All audience responses are moderated by a facilitator before being added to the public record. Responses that contain harmful content, personal attacks, or unverified claims will not be published. Learner profiles are private by default.
               </p>
             </div>
           </div>

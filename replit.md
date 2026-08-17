@@ -1,8 +1,8 @@
 # CTRL+ALT+MEDIA
 
-A student-powered creative technology, AI literacy, civic media, and alternative journalism lab for undergraduate learners (freshmen, sophomores, and juniors). Students investigate failures in the information system, build verified alternatives, and take their work directly to the people with the power to respond.
+A learner-powered creative technology, AI literacy, civic media, and alternative journalism lab for undergraduate learners (freshmen, sophomores, and juniors). Students investigate failures in the information system, build verified alternatives, and take their work directly to the people with the power to respond.
 
-**The public record has crashed. Students reboot it.**
+**The public record has crashed. Learners reboot it.**
 
 ## Stack
 
