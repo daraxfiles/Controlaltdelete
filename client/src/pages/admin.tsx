@@ -1,10 +1,54 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useUser } from "@clerk/react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Shield, CheckCircle, Clock, AlertTriangle, Users, FileCheck, Send } from "lucide-react";
+import { Shield, CheckCircle, Clock, AlertTriangle, Users, FileCheck, Send, Code, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { MediaPatch } from "@shared/schema";
+import { useState } from "react";
+
+function EmbedSnippet({ patchId }: { patchId: string }) {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
+  const snippet = `<div data-ctrl-patch="${patchId}"></div>\n<script src="${origin}/widget.js" async><\/script>`;
+
+  function copy() {
+    navigator.clipboard.writeText(snippet).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
+  return (
+    <div className="mt-3">
+      <Button
+        size="sm"
+        variant="ghost"
+        className="rounded-none border border-[hsl(var(--border))] font-mono text-[10px] tracking-widest uppercase h-7 px-3 gap-1.5"
+        onClick={() => setOpen(o => !o)}
+      >
+        <Code className="h-3 w-3" /> {open ? "Hide Embed" : "Embed"}
+      </Button>
+
+      {open && (
+        <div className="mt-2 border border-[hsl(var(--border))] bg-[hsl(var(--background))] rounded-sm p-3">
+          <p className="font-mono text-[9px] text-[hsl(var(--muted-foreground)/0.5)] mb-2 tracking-widest uppercase">Paste on any partner site</p>
+          <pre className="font-mono text-[10px] text-[hsl(var(--primary)/0.9)] bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-sm p-3 overflow-x-auto whitespace-pre-wrap break-all leading-relaxed">
+            {snippet}
+          </pre>
+          <Button
+            size="sm"
+            className="mt-2 rounded-none bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] font-mono text-[10px] font-bold tracking-widest uppercase hover:bg-[hsl(var(--primary)/0.85)] h-7 px-3 gap-1.5"
+            onClick={copy}
+          >
+            {copied ? <><Check className="h-3 w-3" /> Copied!</> : <><Copy className="h-3 w-3" /> Copy Snippet</>}
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function AdminPanel() {
   const { user } = useUser();
@@ -117,6 +161,7 @@ export default function AdminPanel() {
                       )}
                     </div>
                   </div>
+                  {patch.verificationStatus === "verified" && <EmbedSnippet patchId={patch.id} />}
                 </div>
               ))}
             </div>

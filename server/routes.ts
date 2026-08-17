@@ -243,6 +243,34 @@ export async function registerRoutes(
     }
   });
 
+  // ── Widget (public, permissive CORS) ──────────────────────────────────
+  app.get("/api/widget/:patchId", async (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET");
+    res.setHeader("Cache-Control", "public, max-age=60");
+    try {
+      const patch = await storage.getMediaPatch(req.params.patchId);
+      // Only serve verified patches — pending/disputed must not be publicly embeddable
+      if (!patch || patch.verificationStatus !== "verified") {
+        return res.status(404).json({ error: "Patch not found or not yet verified" });
+      }
+      // Return a curated subset — no internal IDs beyond what's needed for the link
+      res.json({
+        id: patch.id,
+        title: patch.title,
+        crewName: patch.crewName,
+        community: patch.community,
+        mediaType: patch.mediaType,
+        topic: patch.topic,
+        description: patch.description,
+        verificationStatus: patch.verificationStatus,
+        publishedAt: patch.publishedAt,
+      });
+    } catch {
+      res.status(500).json({ error: "Failed to fetch widget data" });
+    }
+  });
+
   // ── Admin ──────────────────────────────────────────────────────────────
   app.get("/api/admin/patches", requireAdmin, async (req: any, res) => {
     try {

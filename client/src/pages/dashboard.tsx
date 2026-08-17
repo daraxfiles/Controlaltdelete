@@ -344,11 +344,11 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              {missions.length === 0 ? (
+              {missions.length < 1 ? (
                 <p className="font-mono text-xs text-[hsl(var(--muted-foreground)/0.5)]">No missions started yet.</p>
               ) : (
                 <div className="space-y-2">
-                  {(missions as typeof missions[number][]).slice(0, 5).map(mission => {
+                  {([...missions] as typeof missions[number][]).slice(0, 5).map(mission => {
                     const prog = progress.find((p: any) => p.missionId === mission.id);
                     return (
                       <Link key={mission.id} href="/missions">

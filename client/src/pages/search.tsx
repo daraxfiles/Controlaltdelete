@@ -47,7 +47,7 @@ export default function Search() {
         tagColor: "hsl(var(--accent))",
       }));
 
-    const missionResults: Result[] = (missions as typeof missions[number][])
+    const missionResults: Result[] = ([...missions] as typeof missions[number][])
       .filter(m =>
         m.title.toLowerCase().includes(q) ||
         m.objective.toLowerCase().includes(q) ||

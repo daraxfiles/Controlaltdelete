@@ -9,8 +9,8 @@ export const RANKS = [
 
 export type RankId = typeof RANKS[number]["id"];
 
-export function getRank(xp: number) {
-  let rank = RANKS[0];
+export function getRank(xp: number): typeof RANKS[number] {
+  let rank: typeof RANKS[number] = RANKS[0];
   for (const r of RANKS) {
     if (xp >= r.minXp) rank = r;
   }
