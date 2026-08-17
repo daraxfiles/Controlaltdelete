@@ -14,7 +14,7 @@ export function Footer() {
               <span className="font-black text-base tracking-tight font-mono text-[hsl(var(--primary))]">MEDIA</span>
             </div>
             <p className="text-sm text-[hsl(var(--muted-foreground))] leading-relaxed mb-4">
-              A youth-powered creative technology, AI literacy, civic media, and alternative journalism lab.
+              A student-powered creative technology, AI literacy, civic media, and alternative journalism lab.
             </p>
             <p className="font-mono text-xs text-[hsl(var(--primary)/0.7)] tracking-widest uppercase">
               No Receipt. No Reboot.

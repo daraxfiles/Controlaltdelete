@@ -23,7 +23,7 @@ export default function RebootCrews() {
           Reboot Crews
         </h1>
         <p className="text-[hsl(var(--muted-foreground))] max-w-xl mb-12 leading-relaxed">
-          Every investigation is built by a Reboot Crew — a small team of youth working together through all seven stages of the Reboot Protocol. No solo reboots. The record requires collaboration.
+          Every investigation is built by a Reboot Crew — a small team of undergraduate students working together through all seven stages of the Reboot Protocol. No solo reboots. The record requires collaboration.
         </p>
 
         {/* How crews work */}
@@ -31,7 +31,7 @@ export default function RebootCrews() {
           <p className="system-label mb-6">How Crews Work</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-[hsl(var(--border))]">
             {[
-              { icon: Users, color: "hsl(var(--primary))", title: "2–6 Youth Members", desc: "Each crew has between 2 and 6 members. Smaller crews move faster; larger crews can take on more complex investigations." },
+              { icon: Users, color: "hsl(var(--primary))", title: "2–6 Student Members", desc: "Each crew has between 2 and 6 members. Smaller crews move faster; larger crews can take on more complex investigations." },
               { icon: Zap, color: "hsl(var(--accent))", title: "One Project at a Time", desc: "Crews focus on a single Reboot Project from Crash Report through Patch Notes before starting a new investigation." },
               { icon: Shield, color: "hsl(var(--warning))", title: "Facilitator Oversight", desc: "Every crew is connected to a facilitator who can review work, approve publication, and pause a project if safety concerns arise." },
               { icon: Clock, color: "hsl(var(--chart-5))", title: "Red Team Review Required", desc: "Before building the Media Patch, a different crew must complete a Red Team Review. No crew reviews its own work." },

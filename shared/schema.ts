@@ -42,7 +42,7 @@ export const contacts = pgTable("contacts", {
   name: text("name").notNull(),
   email: text("email").notNull(),
   message: text("message").notNull(),
-  role: text("role").default("youth").notNull(),
+  role: text("role").default("student").notNull(),
   submittedAt: timestamp("submitted_at").defaultNow().notNull(),
 });
 
@@ -53,7 +53,7 @@ export const userProfiles = pgTable("user_profiles", {
   displayName: text("display_name").notNull(),
   crewName: text("crew_name"),
   bio: text("bio"),
-  role: text("role").default("youth").notNull(), // youth | facilitator | admin
+  role: text("role").default("student").notNull(), // student | facilitator | admin
   foundingCrew: boolean("founding_crew").default(false).notNull(),
   language: text("language").default("en").notNull(), // en | es
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -208,7 +208,7 @@ export const insertContactSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Valid email required"),
   message: z.string().min(10, "Message must be at least 10 characters"),
-  role: z.enum(["youth", "facilitator", "mentor", "educator", "community_partner", "other"]).default("youth"),
+  role: z.enum(["student", "facilitator", "mentor", "educator", "community_partner", "other"]).default("student"),
 });
 
 // ── Types ─────────────────────────────────────────────────────────────────

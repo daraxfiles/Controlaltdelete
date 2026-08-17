@@ -99,7 +99,7 @@ export class DatabaseStorage {
       displayName: data.displayName,
       crewName: data.crewName,
       bio: data.bio,
-      role: data.role ?? "youth",
+      role: data.role ?? "student",
       foundingCrew: isFoundingCrew,
       language: data.language ?? "en",
     }).returning();

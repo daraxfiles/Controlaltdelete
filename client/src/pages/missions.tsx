@@ -332,12 +332,12 @@ export default function Missions() {
       <div className="container mx-auto max-w-5xl px-6 py-12">
 
         {/* Header */}
-        <p className="system-label mb-4">Youth Missions Library</p>
+        <p className="system-label mb-4">Undergraduate Missions Library</p>
         <h1 className="font-black font-mono text-4xl md:text-5xl text-[hsl(var(--foreground))] mb-3 leading-tight">
           Choose Your Mission
         </h1>
         <p className="text-[hsl(var(--muted-foreground))] max-w-xl mb-3 leading-relaxed">
-          Ten guided investigations for youth crews. Select a mission to see the full brief.
+          Ten guided investigations for undergraduate crews. Select a mission to see the full brief.
         </p>
 
         {/* Difficulty legend */}

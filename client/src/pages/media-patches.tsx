@@ -121,7 +121,7 @@ export default function MediaPatches() {
           Media Patches
         </h1>
         <p className="text-[hsl(var(--muted-foreground))] max-w-xl mb-3 leading-relaxed">
-          Verified investigations, alternative media, and civic documentation built by youth crews. Every patch includes a public Evidence Receipt.
+          Verified investigations, alternative media, and civic documentation built by undergraduate crews. Every patch includes a public Evidence Receipt.
         </p>
         <p className="font-mono text-xs text-[hsl(var(--primary)/0.7)] mb-10 tracking-widest">
           NO RECEIPT. NO REBOOT.

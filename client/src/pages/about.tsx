@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 const ROLES = [
   {
-    title: "Youth Member",
+    title: "Undergraduate Student",
     icon: Users,
     color: "hsl(var(--primary))",
     capabilities: [
@@ -61,15 +61,15 @@ const VALUES = [
   },
   {
     label: "No Receipt. No Reboot.",
-    desc: "Transparency is not a feature — it is the foundation. Youth publish their work with full sourcing or they do not publish at all.",
+    desc: "Transparency is not a feature — it is the foundation. Students publish their work with full sourcing or they do not publish at all.",
   },
   {
     label: "Erasure is part of the problem.",
-    desc: "We replaced DELETE with MEDIA in our name deliberately. Youth build what the system failed to create, not what it erased.",
+    desc: "We replaced DELETE with MEDIA in our name deliberately. Students build what the system failed to create, not what it erased.",
   },
   {
-    label: "Youth don't just consume. They reshape.",
-    desc: "CTRL+ALT+MEDIA gives young people the skills, tools, platform, and confidence to act on the information systems that affect their lives.",
+    label: "Students don't just consume. They reshape.",
+    desc: "CTRL+ALT+MEDIA gives undergraduate students the skills, tools, platform, and confidence to act on the information systems that affect their lives.",
   },
 ];
 
@@ -81,16 +81,16 @@ export default function About() {
         <div className="container mx-auto max-w-4xl">
           <p className="system-label mb-4">What We Are</p>
           <h1 className="font-black font-mono text-4xl md:text-5xl text-[hsl(var(--foreground))] mb-6 leading-tight">
-            A youth-powered lab for{" "}
+            A student-powered lab for{" "}
             <span className="gradient-text">civic media</span> and{" "}
             <span className="gradient-text">information accountability</span>
           </h1>
           <p className="text-[hsl(var(--muted-foreground))] text-lg leading-relaxed max-w-2xl mb-8">
-            CTRL+ALT+MEDIA is not a traditional online course, school newspaper, or fact-checking website. It is a bold, youth-led digital newsroom, creative technology lab, and civic action platform.
+            CTRL+ALT+MEDIA is not a traditional online course, student newspaper, or fact-checking website. It is a bold, student-led digital newsroom, creative technology lab, and civic action platform.
           </p>
           <div className="terminal-box inline-block px-5 py-3">
             <p className="font-mono text-xs text-[hsl(var(--primary))]">
-              The public record has crashed. Youth reboot it.
+              The public record has crashed. Students reboot it.
             </p>
           </div>
         </div>
@@ -101,10 +101,10 @@ export default function About() {
         <div className="container mx-auto max-w-5xl">
           <p className="system-label mb-4">Who We Serve</p>
           <h2 className="font-black font-mono text-3xl text-[hsl(var(--foreground))] mb-6">
-            Primary users are young people ages 14–24
+            Built for undergraduate students — freshmen, sophomores, and juniors
           </h2>
           <p className="text-[hsl(var(--muted-foreground))] mb-12 max-w-2xl leading-relaxed">
-            Participating in a school, community, library, nonprofit, or youth development program. The platform also supports program facilitators, mentors, educators, journalists, and community partners.
+            Enrolled in a college or university program. The platform also supports faculty facilitators, mentors, professional journalists, and community partners working alongside student crews.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -165,10 +165,10 @@ export default function About() {
             <div>
               <p className="system-label mb-4">Safety & Privacy</p>
               <h2 className="font-mono font-black text-3xl text-[hsl(var(--foreground))] mb-6">
-                Built for youth safety
+                Built for student safety
               </h2>
               <p className="text-[hsl(var(--muted-foreground))] leading-relaxed mb-6">
-                Because this platform serves young people, every feature is built with strong privacy and moderation defaults.
+                Because this platform serves students and their communities, every feature is built with strong privacy and moderation defaults.
               </p>
               <div className="space-y-3">
                 {[
@@ -194,7 +194,7 @@ export default function About() {
                 Bring CTRL+ALT+MEDIA to your community
               </h2>
               <p className="text-[hsl(var(--muted-foreground))] leading-relaxed mb-8">
-                Whether you're an educator, youth program coordinator, community organization, library, or journalist — we want to work with you.
+                Whether you're a faculty member, program coordinator, community organization, or journalist — we want to work with you.
               </p>
               <div className="space-y-3">
                 <Link href="/create">
