@@ -659,6 +659,77 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Explore Communities ──────────────────────────────────────── */}
+      <section className="py-20 px-6 border-t border-[hsl(var(--border))]">
+        <div className="container mx-auto max-w-5xl">
+          <div className="mb-10">
+            <p className="system-label mb-4 flex">Explore Communities</p>
+            <h2 className="font-mono font-black text-3xl md:text-4xl leading-tight mb-3">
+              Investigate where you are.
+            </h2>
+            <p className="text-[hsl(var(--muted-foreground))] text-sm leading-relaxed max-w-xl">
+              CTRL+ALT+MEDIA supports localized hubs for universities and communities. Each hub brings
+              the same investigation framework to the specific information problems of a place.
+            </p>
+          </div>
+
+          {/* UArk hub card */}
+          <div className="grid md:grid-cols-2 gap-4">
+            <Link href="/community/uark">
+              <div className="group relative border border-[hsl(var(--border))] hover:border-[#9e1b32]/60 transition-all duration-300 p-6 cursor-pointer overflow-hidden">
+                {/* Cardinal wash */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-[0.04] transition-opacity"
+                  style={{ background: "#9e1b32" }}
+                />
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-3 h-3 rounded-full" style={{ background: "#9e1b32" }} />
+                      <span className="font-mono text-[10px] tracking-widest uppercase text-[hsl(var(--muted-foreground)/0.5)]">
+                        University Community
+                      </span>
+                    </div>
+                    <h3 className="font-mono font-black text-base leading-tight">
+                      CTRL+ALT+MEDIA @ UArk
+                    </h3>
+                    <p className="font-mono text-xs text-[hsl(var(--muted-foreground)/0.6)] mt-0.5">
+                      University of Arkansas · Fayetteville
+                    </p>
+                  </div>
+                  <span className="font-mono text-[10px] tracking-widest uppercase px-2 py-1 border text-[#9e1b32] border-[#9e1b32]/40 shrink-0">
+                    Active
+                  </span>
+                </div>
+                <p className="text-xs text-[hsl(var(--muted-foreground))] leading-relaxed mb-4">
+                  Razorbacks investigating the information systems shaping campus and community life.
+                </p>
+                <div className="flex items-center gap-2 font-mono text-xs font-bold" style={{ color: "#9e1b32" }}>
+                  Enter UArk Hub
+                  <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
+                </div>
+              </div>
+            </Link>
+
+            {/* Placeholder "coming soon" card */}
+            <div className="border border-dashed border-[hsl(var(--border))] p-6 flex flex-col items-start justify-center opacity-50">
+              <p className="font-mono text-[10px] tracking-widest uppercase text-[hsl(var(--muted-foreground)/0.5)] mb-2">
+                Your Community
+              </p>
+              <p className="font-mono text-sm text-[hsl(var(--muted-foreground))] mb-3">
+                Interested in bringing CTRL+ALT+MEDIA to your university or community?
+              </p>
+              <Link href="/about">
+                <button className="font-mono text-xs underline text-[hsl(var(--primary))]">
+                  Get in touch →
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── FINAL CTA ───────────────────────────────────────────────── */}
       <section className="py-24 px-6 bg-[hsl(0_0%_3%)] border-t border-[hsl(var(--border))]">
         <div className="container mx-auto max-w-4xl text-center">

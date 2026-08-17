@@ -46,17 +46,27 @@ export const XP_AWARDS = {
 export type XpEvent = keyof typeof XP_AWARDS;
 
 // ── Badge definitions ────────────────────────────────────────────────────────
-export const BADGES: Record<string, { label: string; desc: string; icon: string; color: string }> = {
-  founding_crew:             { label: "Founding Crew",         desc: "Among the first to join the platform.",             icon: "⭐", color: "hsl(145 85% 48%)" },
-  first_mission:             { label: "First Mission",          desc: "Completed your first investigation mission.",        icon: "🎯", color: "#3b82f6" },
-  truth_seeker:              { label: "Truth Seeker",           desc: "Completed 5 missions.",                             icon: "🔍", color: "#8b5cf6" },
-  full_crew:                 { label: "Full Crew",              desc: "Completed all 10 missions.",                        icon: "🏆", color: "#f59e0b" },
-  first_evidence:            { label: "Evidence Filed",         desc: "Submitted your first Evidence Receipt.",            icon: "📋", color: "#06b6d4" },
-  first_ping:                { label: "Power Ping",             desc: "Sent your first outreach to a decision-maker.",     icon: "📡", color: "#ec4899" },
-  decision_maker_responded:  { label: "They Responded",         desc: "A decision-maker responded to your Power Ping.",    icon: "✅", color: "hsl(145 85% 48%)" },
-  first_patch:               { label: "Patch Published",        desc: "Published your first Media Patch.",                 icon: "📰", color: "#f97316" },
-  streak_3:                  { label: "3-Day Streak",           desc: "Active 3 days in a row.",                           icon: "🔥", color: "#ef4444" },
-  streak_7:                  { label: "7-Day Streak",           desc: "Active 7 days in a row.",                           icon: "⚡", color: "#f59e0b" },
+export const BADGES: Record<string, { label: string; desc: string; icon: string; color: string; community?: string }> = {
+  // ── Core platform badges ─────────────────────────────────────────────────
+  founding_crew:             { label: "Founding Crew",           desc: "Among the first to join the platform.",                icon: "⭐", color: "hsl(145 85% 48%)" },
+  first_mission:             { label: "First Mission",            desc: "Completed your first investigation mission.",            icon: "🎯", color: "#3b82f6" },
+  truth_seeker:              { label: "Truth Seeker",             desc: "Completed 5 missions.",                                 icon: "🔍", color: "#8b5cf6" },
+  full_crew:                 { label: "Full Crew",                desc: "Completed all 10 missions.",                            icon: "🏆", color: "#f59e0b" },
+  first_evidence:            { label: "Evidence Filed",           desc: "Submitted your first Evidence Receipt.",                icon: "📋", color: "#06b6d4" },
+  first_ping:                { label: "Power Ping",               desc: "Sent your first outreach to a decision-maker.",         icon: "📡", color: "#ec4899" },
+  decision_maker_responded:  { label: "They Responded",           desc: "A decision-maker responded to your Power Ping.",        icon: "✅", color: "hsl(145 85% 48%)" },
+  first_patch:               { label: "Patch Published",          desc: "Published your first Media Patch.",                     icon: "📰", color: "#f97316" },
+  streak_3:                  { label: "3-Day Streak",             desc: "Active 3 days in a row.",                               icon: "🔥", color: "#ef4444" },
+  streak_7:                  { label: "7-Day Streak",             desc: "Active 7 days in a row.",                               icon: "⚡", color: "#f59e0b" },
+  // ── UArk community badges ────────────────────────────────────────────────
+  razorback_investigator:    { label: "Razorback Investigator",   desc: "Completed your first UArk investigation.",              icon: "🐗", color: "#9e1b32", community: "uark" },
+  ai_auditor:                { label: "AI Auditor",               desc: "Completed an AI-focused investigation.",                icon: "🤖", color: "#6366f1", community: "uark" },
+  campus_fact_checker:       { label: "Campus Fact Checker",      desc: "Completed a misinformation or verification mission.",   icon: "🔎", color: "#059669", community: "uark" },
+  information_mapper:        { label: "Information Mapper",       desc: "Completed an Information Desert investigation.",         icon: "🗺️", color: "#0891b2", community: "uark" },
+  community_listener:        { label: "Community Listener",       desc: "Used interviews or community evidence effectively.",     icon: "👂", color: "#7c3aed", community: "uark" },
+  power_ping_uark:           { label: "Power Ping: UArk",         desc: "Sent an evidence-backed UArk Power Ping.",              icon: "📡", color: "#9e1b32", community: "uark" },
+  patch_the_campus:          { label: "Patch the Campus",         desc: "Published a UArk Media Patch.",                        icon: "🏛️", color: "#9e1b32", community: "uark" },
+  evidence_first:            { label: "Evidence First",           desc: "Submitted 3 or more Evidence Receipts.",               icon: "📋", color: "#f59e0b", community: "uark" },
 };
 
 // Compute which badges should be earned given current stats

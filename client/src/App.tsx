@@ -23,6 +23,9 @@ import Search from "@/pages/search";
 import EvidenceReceipt from "@/pages/evidence-receipt";
 import PowerPing from "@/pages/power-ping";
 import AdminPanel from "@/pages/admin";
+import UArkHub from "@/pages/uark";
+import UArkQuestions from "@/pages/uark-questions";
+import UArkPatches from "@/pages/uark-patches";
 import NotFound from "@/pages/not-found";
 
 // ── Clerk config ─────────────────────────────────────────────────────────
@@ -216,6 +219,10 @@ function Router() {
           )}
         </Route>
         {/* Clerk sign-in/sign-up — /*? is required */}
+        {/* Community hub pages */}
+        <Route path="/community/uark" component={UArkHub} />
+        <Route path="/community/uark/questions" component={UArkQuestions} />
+        <Route path="/community/uark/patches" component={UArkPatches} />
         <Route path="/sign-in/*?" component={SignInPage} />
         <Route path="/sign-up/*?" component={SignUpPage} />
         <Route component={NotFound} />

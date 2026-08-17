@@ -1,2 +1,3 @@
 - [Clerk auth setup](clerk-auth.md) — Clerk provisioned; Tailwind 3 stack means no cssLayerName; use shadcn theme with terminal dark variables.
 - [Schema and new tables](new-tables.md) — userProfiles, missionProgress, powerPings, evidenceReceipts, rebootRoomResponses added and pushed.
+- [UArk Hub Architecture](uark-hub.md) — Community hub system; new tables (communities/cohorts/communityQuestions/questionUpvotes); 3 frontend pages; Communities nav dropdown; extensible by slug.

@@ -214,6 +214,90 @@ export async function registerRoutes(
     }
   });
 
+  // ── Community hub routes ────────────────────────────────────────────────
+
+  app.get("/api/communities", async (_req, res) => {
+    try { res.json(await storage.getAllCommunities()); }
+    catch { res.status(500).json({ error: "Failed to fetch communities" }); }
+  });
+
+  app.get("/api/communities/:slug", async (req, res) => {
+    try {
+      const c = await storage.getCommunity(req.params.slug);
+      if (!c) return res.status(404).json({ error: "Community not found" });
+      res.json(c);
+    } catch { res.status(500).json({ error: "Failed to fetch community" }); }
+  });
+
+  app.get("/api/community/:slug/stats", async (req, res) => {
+    try { res.json(await storage.getCommunityStats(req.params.slug)); }
+    catch { res.status(500).json({ error: "Failed to fetch stats" }); }
+  });
+
+  app.get("/api/community/:slug/patches", async (req, res) => {
+    try { res.json(await storage.getCommunityPatches(req.params.slug)); }
+    catch { res.status(500).json({ error: "Failed to fetch patches" }); }
+  });
+
+  app.get("/api/community-questions/:slug", async (req, res) => {
+    try { res.json(await storage.getCommunityQuestions(req.params.slug, false)); }
+    catch { res.status(500).json({ error: "Failed to fetch questions" }); }
+  });
+
+  app.get("/api/community-questions/:slug/my-upvotes", requireAuth, async (req: any, res) => {
+    try { res.json(await storage.getUserUpvotedQuestions(req.userId, req.params.slug)); }
+    catch { res.status(500).json({ error: "Failed to fetch upvotes" }); }
+  });
+
+  app.post("/api/community-questions/:slug", requireAuth, async (req: any, res) => {
+    try {
+      const { question, context } = req.body;
+      if (!question || typeof question !== "string" || question.trim().length < 10)
+        return res.status(400).json({ error: "Question must be at least 10 characters." });
+      const row = await storage.createCommunityQuestion({
+        communitySlug: req.params.slug,
+        clerkUserId: req.userId,
+        question: question.trim().slice(0, 300),
+        context: context?.trim().slice(0, 500),
+      });
+      res.status(201).json(row);
+    } catch { res.status(500).json({ error: "Failed to submit question" }); }
+  });
+
+  app.post("/api/community-questions/:id/upvote", requireAuth, async (req: any, res) => {
+    try { res.json(await storage.upvoteQuestion(req.params.id, req.userId)); }
+    catch { res.status(500).json({ error: "Failed to upvote" }); }
+  });
+
+  app.patch("/api/admin/community-questions/:id", requireAdmin, async (req: any, res) => {
+    try {
+      const { status, linkedProjectId, linkedPatchId } = req.body;
+      const row = await storage.updateCommunityQuestion(req.params.id, {
+        ...(status && { status }),
+        ...(linkedProjectId && { linkedProjectId }),
+        ...(linkedPatchId && { linkedPatchId }),
+      });
+      if (!row) return res.status(404).json({ error: "Question not found" });
+      res.json(row);
+    } catch { res.status(500).json({ error: "Failed to update question" }); }
+  });
+
+  app.get("/api/admin/community-questions", requireAdmin, async (req: any, res) => {
+    try {
+      const rows = await storage.getAllCommunityQuestionsForAdmin(req.query.slug as string | undefined);
+      res.json(rows);
+    } catch { res.status(500).json({ error: "Failed to fetch questions" }); }
+  });
+
+  app.patch("/api/power-pings/:id/impact", requireAuth, async (req: any, res) => {
+    try {
+      const { impactOutcome, impactDescription } = req.body;
+      const ping = await storage.updatePowerPingImpact(req.params.id, req.userId, { impactOutcome, impactDescription });
+      if (!ping) return res.status(404).json({ error: "Power Ping not found" });
+      res.json(ping);
+    } catch { res.status(500).json({ error: "Failed to update impact" }); }
+  });
+
   // ── Reboot Room Responses ──────────────────────────────────────────────
   const VALID_ACTIONS = ["verify", "amplify", "apply"] as const;
   type RebootAction = typeof VALID_ACTIONS[number];

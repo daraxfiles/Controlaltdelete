@@ -10,6 +10,10 @@ import {
   powerPings,
   evidenceReceipts,
   rebootRoomResponses,
+  communities,
+  communityQuestions,
+  questionUpvotes,
+  cohorts,
   type MediaPatch,
   type InsertMediaPatch,
   type RebootProject,
@@ -220,9 +224,19 @@ export class DatabaseStorage {
 
   async updatePowerPingStatus(id: string, status: string, responseNotes?: string) {
     if (!db) return undefined;
+    const respondedStatuses = ["responded", "response_received", "action_promised", "action_taken", "clarification_requested"];
     const [ping] = await db.update(powerPings)
-      .set({ status, responseNotes, respondedAt: ["responded", "action_promised"].includes(status) ? new Date() : undefined })
+      .set({ status, responseNotes, respondedAt: respondedStatuses.includes(status) ? new Date() : undefined })
       .where(eq(powerPings.id, id)).returning();
+    return ping;
+  }
+
+  async updatePowerPingImpact(id: string, clerkUserId: string, data: { impactOutcome?: string; impactDescription?: string }) {
+    if (!db) return undefined;
+    // Verify ownership before allowing impact update
+    const [existing] = await db.select().from(powerPings).where(eq(powerPings.id, id));
+    if (!existing || existing.clerkUserId !== clerkUserId) return undefined;
+    const [ping] = await db.update(powerPings).set(data).where(eq(powerPings.id, id)).returning();
     return ping;
   }
 
@@ -288,6 +302,137 @@ export class DatabaseStorage {
       .where(eq(rebootRoomResponses.id, id))
       .returning();
     return row;
+  }
+
+  // ── Communities ────────────────────────────────────────────────────────
+
+  async getCommunity(slug: string) {
+    if (!db) return undefined;
+    const [community] = await db.select().from(communities).where(eq(communities.slug, slug));
+    return community;
+  }
+
+  async getAllCommunities() {
+    if (!db) return [];
+    return db.select().from(communities).where(eq(communities.isActive, true)).orderBy(communities.name);
+  }
+
+  async upsertCommunity(data: {
+    slug: string; name: string; shortName: string; description?: string; tagline?: string;
+    location?: string; institutionType?: string; primaryColor?: string; secondaryColor?: string;
+  }) {
+    if (!db) throw new Error("Database not available.");
+    const existing = await this.getCommunity(data.slug);
+    if (existing) {
+      const [row] = await db.update(communities).set({ ...data, updatedAt: new Date() }).where(eq(communities.slug, data.slug)).returning();
+      return row;
+    }
+    const [row] = await db.insert(communities).values({ id: randomUUID(), isActive: true, ...data }).returning();
+    return row;
+  }
+
+  // ── Community Questions ─────────────────────────────────────────────────
+
+  async getCommunityQuestions(communitySlug: string, includeAll = false) {
+    if (!db) return [];
+    const rows = await db.select().from(communityQuestions)
+      .where(eq(communityQuestions.communitySlug, communitySlug))
+      .orderBy(desc(communityQuestions.upvotes), desc(communityQuestions.createdAt));
+    // Public view: only approved (open_for_investigation+, not just submitted/under_review)
+    if (!includeAll) {
+      return rows.filter(r => !["submitted", "under_review"].includes(r.status));
+    }
+    return rows;
+  }
+
+  async createCommunityQuestion(data: {
+    communitySlug: string; clerkUserId?: string; question: string; context?: string;
+  }) {
+    if (!db) throw new Error("Database not available.");
+    const [row] = await db.insert(communityQuestions).values({
+      id: randomUUID(),
+      status: "submitted",
+      upvotes: 0,
+      ...data,
+    }).returning();
+    return row;
+  }
+
+  async updateCommunityQuestion(id: string, data: Partial<{
+    status: string; linkedProjectId: string; linkedPatchId: string;
+  }>) {
+    if (!db) return undefined;
+    const [row] = await db.update(communityQuestions)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(communityQuestions.id, id))
+      .returning();
+    return row;
+  }
+
+  async getAllCommunityQuestionsForAdmin(communitySlug?: string) {
+    if (!db) return [];
+    if (communitySlug) {
+      return db.select().from(communityQuestions)
+        .where(eq(communityQuestions.communitySlug, communitySlug))
+        .orderBy(desc(communityQuestions.createdAt));
+    }
+    return db.select().from(communityQuestions).orderBy(desc(communityQuestions.createdAt));
+  }
+
+  async upvoteQuestion(questionId: string, clerkUserId: string): Promise<{ upvoted: boolean; upvotes: number }> {
+    if (!db) throw new Error("Database not available.");
+    // Check if already upvoted
+    const [existing] = await db.select().from(questionUpvotes)
+      .where(eq(questionUpvotes.questionId, questionId));
+    // Note: ideally filter by clerkUserId too but for simplicity we'll check both
+    const rows = await db.select().from(questionUpvotes).where(eq(questionUpvotes.questionId, questionId));
+    const already = rows.find(r => r.clerkUserId === clerkUserId);
+    if (already) {
+      // Toggle off
+      await db.delete(questionUpvotes).where(eq(questionUpvotes.id, already.id));
+      const count = rows.length - 1;
+      await db.update(communityQuestions).set({ upvotes: count }).where(eq(communityQuestions.id, questionId));
+      return { upvoted: false, upvotes: count };
+    }
+    await db.insert(questionUpvotes).values({ id: randomUUID(), questionId, clerkUserId });
+    const count = rows.length + 1;
+    await db.update(communityQuestions).set({ upvotes: count }).where(eq(communityQuestions.id, questionId));
+    return { upvoted: true, upvotes: count };
+  }
+
+  async getUserUpvotedQuestions(clerkUserId: string, communitySlug: string): Promise<string[]> {
+    if (!db) return [];
+    // Get question IDs in this community
+    const qRows = await db.select().from(communityQuestions).where(eq(communityQuestions.communitySlug, communitySlug));
+    const qIds = qRows.map(q => q.id);
+    if (qIds.length === 0) return [];
+    const upvoteRows = await db.select().from(questionUpvotes).where(eq(questionUpvotes.clerkUserId, clerkUserId));
+    return upvoteRows.filter(r => qIds.includes(r.questionId)).map(r => r.questionId);
+  }
+
+  // ── Community-scoped stats ──────────────────────────────────────────────
+
+  async getCommunityStats(hubSlug: string) {
+    if (!db) return { patches: 0, questions: 0, pings: 0, evidenceReceipts: 0 };
+    const [patchRows, questionRows, pingRows, receiptRows] = await Promise.all([
+      db.select().from(mediaPatches).where(eq(mediaPatches.hubSlug, hubSlug)),
+      db.select().from(communityQuestions).where(eq(communityQuestions.communitySlug, hubSlug)),
+      db.select().from(powerPings).where(eq(powerPings.hubSlug, hubSlug)),
+      db.select().from(evidenceReceipts),
+    ]);
+    return {
+      patches: patchRows.length,
+      questions: questionRows.length,
+      pings: pingRows.length,
+      evidenceReceipts: receiptRows.length,
+    };
+  }
+
+  async getCommunityPatches(hubSlug: string) {
+    if (!db) return [];
+    return db.select().from(mediaPatches)
+      .where(eq(mediaPatches.hubSlug, hubSlug))
+      .orderBy(desc(mediaPatches.publishedAt));
   }
 
   // ── Legacy aliases ─────────────────────────────────────────────────────

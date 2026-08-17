@@ -1,4 +1,5 @@
 import { pgTable, text, varchar, boolean, jsonb, timestamp, integer } from "drizzle-orm/pg-core";
+
 import { z } from "zod";
 
 // ── Media Patches (public showcase projects) ──────────────────────────────
@@ -15,6 +16,7 @@ export const mediaPatches = pgTable("media_patches", {
   institutionalResponseStatus: text("institutional_response_status").default("pending").notNull(),
   featured: boolean("featured").default(false).notNull(),
   stage: text("stage").default("patch_notes").notNull(),
+  hubSlug: text("hub_slug"), // optional link to a structured community hub
   publishedAt: timestamp("published_at").defaultNow().notNull(),
 });
 
@@ -30,6 +32,7 @@ export const rebootProjects = pgTable("reboot_projects", {
   whyItMatters: text("why_it_matters"),
   mediaFormat: text("media_format"),
   powerToRespond: text("power_to_respond"),
+  hubSlug: text("hub_slug"), // optional link to a structured community hub
   visibility: text("visibility").default("private").notNull(),
   safetyConcerns: text("safety_concerns"),
   currentStage: text("current_stage").default("crash_report").notNull(),
@@ -87,8 +90,12 @@ export const powerPings = pgTable("power_pings", {
   questions: text("questions").notNull(), // JSON array
   patchUrl: text("patch_url"),
   responseDeadline: text("response_deadline"),
-  status: text("status").default("sent").notNull(), // sent | responded | no_response | action_promised
+  // draft | ready | sent | response_received | clarification_requested | action_promised | action_taken | no_response | closed
+  status: text("status").default("sent").notNull(),
   responseNotes: text("response_notes"),
+  impactOutcome: text("impact_outcome"), // policy_clarification | webpage_corrected | resource_created | misinformation_corrected | conversation_initiated | organization_responded | no_change | learning
+  impactDescription: text("impact_description"),
+  hubSlug: text("hub_slug"),
   sentAt: timestamp("sent_at").defaultNow().notNull(),
   respondedAt: timestamp("responded_at"),
 });
@@ -119,6 +126,61 @@ export const rebootRoomResponses = pgTable("reboot_room_responses", {
   location: text("location"), // for "apply" — where they'll use it
   isAnonymous: boolean("is_anonymous").default(false).notNull(),
   status: text("status").default("pending").notNull(), // pending | approved | rejected
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// ── Communities (hub organizations within the platform) ────────────────────
+export const communities = pgTable("communities", {
+  id: varchar("id", { length: 36 }).primaryKey(),
+  name: text("name").notNull(),
+  slug: varchar("slug", { length: 64 }).notNull().unique(),
+  shortName: text("short_name").notNull(),
+  description: text("description"),
+  tagline: text("tagline"),
+  location: text("location"),
+  institutionType: text("institution_type").default("university").notNull(),
+  primaryColor: text("primary_color").default("#9e1b32").notNull(),
+  secondaryColor: text("secondary_color").default("#ffffff").notNull(),
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ── Cohorts (course/group within a community) ──────────────────────────────
+export const cohorts = pgTable("cohorts", {
+  id: varchar("id", { length: 36 }).primaryKey(),
+  communitySlug: text("community_slug").notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+  facilitatorClerkUserId: text("facilitator_clerk_user_id"),
+  joinCode: text("join_code"),
+  startDate: text("start_date"),
+  endDate: text("end_date"),
+  visibility: text("visibility").default("private").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// ── Community Questions (e.g. Razorback Questions for UArk hub) ────────────
+export const communityQuestions = pgTable("community_questions", {
+  id: varchar("id", { length: 36 }).primaryKey(),
+  communitySlug: text("community_slug").notNull(),
+  clerkUserId: text("clerk_user_id"),
+  question: text("question").notNull(),
+  context: text("context"),
+  // submitted | under_review | open_for_investigation | investigation_started | patch_published | closed
+  status: text("status").default("submitted").notNull(),
+  upvotes: integer("upvotes").default(0).notNull(),
+  linkedProjectId: varchar("linked_project_id", { length: 36 }),
+  linkedPatchId: varchar("linked_patch_id", { length: 36 }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ── Question Upvotes ───────────────────────────────────────────────────────
+export const questionUpvotes = pgTable("question_upvotes", {
+  id: varchar("id", { length: 36 }).primaryKey(),
+  questionId: varchar("question_id", { length: 36 }).notNull(),
+  clerkUserId: text("clerk_user_id").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

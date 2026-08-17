@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Terminal, LogOut, User, Shield, Search } from "lucide-react";
+import { Menu, X, Terminal, LogOut, User, Shield, Search, ChevronDown, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -14,6 +14,76 @@ const navLinks = [
   { href: "/media-patches", label: "Media Patches" },
   { href: "/reboot-room", label: "Reboot Room" },
 ];
+
+const COMMUNITIES = [
+  {
+    href: "/community/uark",
+    label: "CTRL+ALT+MEDIA @ UArk",
+    sub: "University of Arkansas · Fayetteville",
+    color: "#9e1b32",
+  },
+];
+
+function CommunitiesDropdown({ location }: { location: string }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const isActive = location.startsWith("/community/");
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className={cn(
+          "flex items-center gap-1 text-xs font-mono tracking-wide px-3 py-1.5 rounded-sm transition-colors",
+          isActive
+            ? "text-[hsl(var(--primary))] bg-[hsl(var(--primary)/0.1)]"
+            : "text-[hsl(var(--foreground)/0.6)] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--foreground)/0.06)]"
+        )}
+        aria-expanded={open}
+        aria-haspopup="true"
+      >
+        Communities
+        <ChevronDown className={cn("h-3 w-3 transition-transform", open && "rotate-180")} />
+      </button>
+
+      {open && (
+        <div className="absolute top-full left-0 mt-1 w-72 bg-[hsl(0_0%_6%)] border border-[hsl(var(--border))] shadow-xl z-50 py-1">
+          {COMMUNITIES.map(c => (
+            <Link key={c.href} href={c.href} onClick={() => setOpen(false)}>
+              <div className="flex items-start gap-3 px-4 py-3 hover:bg-[hsl(var(--foreground)/0.05)] cursor-pointer group">
+                <div
+                  className="w-2 h-2 rounded-full mt-1 shrink-0"
+                  style={{ background: c.color }}
+                />
+                <div className="min-w-0">
+                  <p className="font-mono text-xs font-bold text-[hsl(var(--foreground)/0.9)] group-hover:text-[hsl(var(--foreground))] leading-snug">
+                    {c.label}
+                  </p>
+                  <p className="font-mono text-[10px] text-[hsl(var(--muted-foreground)/0.6)] mt-0.5">
+                    {c.sub}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+          <div className="border-t border-[hsl(var(--border))] mt-1 pt-1 px-4 pb-2">
+            <p className="font-mono text-[10px] text-[hsl(var(--muted-foreground)/0.4)] italic">
+              More communities coming soon
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function Header() {
   const [location] = useLocation();
@@ -69,6 +139,7 @@ export function Header() {
               </Button>
             </Link>
           ))}
+          <CommunitiesDropdown location={location} />
         </nav>
 
         {/* Right side */}
@@ -157,7 +228,25 @@ export function Header() {
                   </Button>
                 </Link>
 
-                <div className="border-t border-[hsl(var(--border))] my-4" />
+                {/* Communities section in mobile menu */}
+                <div className="border-t border-[hsl(var(--border))] my-3 pt-3">
+                  <p className="font-mono text-[10px] tracking-widest uppercase text-[hsl(var(--muted-foreground)/0.4)] px-4 mb-1">
+                    Communities
+                  </p>
+                  {COMMUNITIES.map(c => (
+                    <Link key={c.href} href={c.href} onClick={() => setOpen(false)}>
+                      <div className="flex items-center gap-3 px-4 py-2 hover:bg-[hsl(var(--foreground)/0.04)] cursor-pointer">
+                        <div className="w-2 h-2 rounded-full shrink-0" style={{ background: c.color }} />
+                        <div>
+                          <p className="font-mono text-xs text-[hsl(var(--foreground)/0.7)]">{c.label}</p>
+                          <p className="font-mono text-[10px] text-[hsl(var(--muted-foreground)/0.5)]">{c.sub}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                <div className="border-t border-[hsl(var(--border))] my-2" />
 
                 <Show when="signed-out">
                   <Link href="/sign-in" onClick={() => setOpen(false)}>

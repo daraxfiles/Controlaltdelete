@@ -1,0 +1,1139 @@
+## Project Task: Add **CTRL+ALT+MEDIA @ UArk** to the Existing CTRL+ALT+MEDIA Platform
+
+You are working on my existing **CTRL+ALT+MEDIA** full-stack web application.
+
+Do **not** rebuild the application from scratch.
+
+First inspect the existing architecture, routes, components, authentication, database schema, styling, dashboard, missions, Reboot Protocol, Media Patches, Evidence Receipts, Power Pings, Reboot Room, resources, XP/badges, and admin functionality.
+
+Preserve all existing features and visual identity.
+
+Your task is to add a localized University of Arkansas experience called:
+
+# CTRL+ALT+MEDIA @ UArk
+
+### Tagline
+
+**Investigate campus. Verify the evidence. Build better information.**
+
+Alternative supporting statement:
+
+> CTRL+ALT+MEDIA @ UArk is a student-powered civic media and AI literacy lab where University of Arkansas students investigate information problems affecting campus and surrounding communities, verify evidence, create alternative media, and engage people or organizations capable of responding.
+
+---
+
+# 1. CORE PRODUCT STRATEGY
+
+Do not make CTRL+ALT+MEDIA exclusively a University of Arkansas application.
+
+The main platform should remain:
+
+**CTRL+ALT+MEDIA**
+
+Add **CTRL+ALT+MEDIA @ UArk** as a localized community/hub inside the larger ecosystem.
+
+Design the architecture so additional communities could eventually be added, such as:
+
+* CTRL+ALT+MEDIA @ UArk
+* CTRL+ALT+MEDIA @ Fayetteville
+* CTRL+ALT+MEDIA @ NWA
+* CTRL+ALT+MEDIA @ Another University
+
+Create the localization architecture in a reusable way.
+
+---
+
+# 2. ADD COMMUNITY / HUB ARCHITECTURE
+
+Introduce a new database/entity concept:
+
+## Community
+
+Suggested fields:
+
+* id
+* name
+* slug
+* shortName
+* description
+* logo or icon
+* location
+* institutionType
+* primaryColor
+* secondaryColor
+* isActive
+* createdAt
+* updatedAt
+
+Create the initial community:
+
+**Name:** CTRL+ALT+MEDIA @ UArk
+**Short Name:** UArk
+**Location:** Fayetteville, Arkansas
+**Type:** University Community
+
+Students should be able to associate investigations, missions, questions, Media Patches, and Power Pings with a community.
+
+Do not break existing records that do not have a community.
+
+---
+
+# 3. ADD A UARK LANDING PAGE
+
+Create a route similar to:
+
+`/uark`
+
+or
+
+`/community/uark`
+
+The page should feel like part of CTRL+ALT+MEDIA while clearly representing the University of Arkansas community.
+
+## Hero
+
+Display:
+
+### CTRL+ALT+MEDIA @ UArk
+
+**Investigate campus. Verify the evidence. Build better information.**
+
+Supporting text:
+
+> A student-powered civic media and AI literacy lab where Razorbacks investigate how information works across campus and community life, identify gaps and misinformation, build evidence-backed media, and bring their findings to people who can respond.
+
+Primary CTA:
+
+**Start a UArk Investigation**
+
+Secondary CTA:
+
+**Explore UArk Missions**
+
+Third CTA:
+
+**View Media Patches**
+
+Use subtle University of Arkansas-inspired visual cues without copying protected university branding or logos.
+
+Use a tasteful cardinal/red accent within the existing CTRL+ALT+MEDIA design system.
+
+Preserve accessibility and adequate contrast.
+
+---
+
+# 4. CREATE "UARK MISSIONS"
+
+Add a mission category/filter:
+
+## UArk Missions
+
+Create the following starter missions.
+
+---
+
+## Mission 1 — AI Said What About Arkansas?
+
+**Level:** Beginner/Intermediate
+**Topics:** AI Literacy, Verification, Local Knowledge
+
+Description:
+
+Students ask an AI system questions about Arkansas, the University of Arkansas, Northwest Arkansas, or a local community.
+
+Students then:
+
+1. Record the AI response.
+2. Extract factual claims.
+3. Verify claims using credible sources.
+4. Identify inaccuracies.
+5. Identify missing context.
+6. Identify stereotypes or oversimplifications.
+7. Produce a corrected evidence-backed media artifact.
+
+Possible outputs:
+
+* infographic
+* article
+* short video
+* podcast
+* interactive webpage
+* AI fact-check card
+
+Final question:
+
+**What did the AI get right, wrong, or leave out?**
+
+---
+
+## Mission 2 — Who Gets Quoted at UArk?
+
+**Level:** Intermediate
+**Topics:** Representation, Journalism, Data Literacy
+
+Students analyze a sample of campus-related media stories.
+
+They identify:
+
+* who is quoted
+* student voices
+* faculty voices
+* administrator voices
+* community voices
+* whose perspectives dominate
+* whose voices may be missing
+
+Students should create a small data visualization and interpretation.
+
+Final question:
+
+**Who gets to speak when our campus stories are told?**
+
+---
+
+## Mission 3 — Razorback Rumor Trace
+
+**Level:** Beginner
+**Topics:** Misinformation, Verification
+
+Students investigate a non-sensitive rumor, claim, or piece of questionable information circulating within the university community.
+
+Workflow:
+
+Origin
+→ Reposts
+→ Changes in wording
+→ Evidence used
+→ Official/credible sources
+→ Verified conclusion
+
+Students should focus on **how information traveled**, not merely whether something was true or false.
+
+Final question:
+
+**How did this claim move through the campus information ecosystem?**
+
+---
+
+## Mission 4 — Algorithm Audit: Razorback Edition
+
+**Level:** Intermediate/Advanced
+**Topics:** Algorithmic Literacy, AI Literacy
+
+Teams investigate how different platforms present information about the same topic.
+
+Possible platforms:
+
+* Google
+* YouTube
+* TikTok
+* Instagram
+* Reddit
+* AI assistants
+
+Students compare:
+
+* what appears first
+* what information is prioritized
+* what is missing
+* commercial influence
+* personalization
+* recommendations
+* potential bias
+
+Final question:
+
+**How might different information systems create different versions of the same reality?**
+
+---
+
+## Mission 5 — UArk Information Desert Map
+
+**Level:** Advanced
+**Topics:** Information Access, Design, Community Research
+
+Students investigate where members of the university community actually obtain important information.
+
+Possible populations:
+
+* first-year students
+* international students
+* graduate students
+* first-generation students
+* commuter students
+* online students
+* student parents
+
+Students map sources such as:
+
+* university websites
+* Blackboard/LMS
+* email
+* advisors
+* faculty
+* GroupMe
+* Reddit
+* TikTok
+* Instagram
+* friends
+* student organizations
+
+Students identify gaps where important information is difficult to locate or understand.
+
+Final product should propose or create an information resource addressing the gap.
+
+---
+
+## Mission 6 — Public Document Decoder
+
+**Level:** Beginner/Intermediate
+**Topics:** Information Design, Accessibility
+
+Students select an appropriate publicly available university or community document and convert complicated information into an accessible public-facing explanation.
+
+Possible outputs:
+
+* infographic
+* FAQ
+* short video
+* visual explainer
+* interactive webpage
+* podcast
+* plain-language guide
+
+Final question:
+
+**Can someone unfamiliar with this system understand and use this information?**
+
+---
+
+## Mission 7 — Search Yourself: Razorback Edition
+
+Students investigate what search engines and AI systems say about:
+
+* UArk
+* a campus organization
+* an academic field
+* Fayetteville
+* Northwest Arkansas
+* an Arkansas community
+
+Compare representations and identify:
+
+* inaccuracies
+* outdated information
+* missing context
+* stereotypes
+* authoritative versus weak sources
+
+---
+
+## Mission 8 — Accessibility Audit
+
+Students examine publicly accessible information or digital resources and ask:
+
+**Who may be unintentionally excluded from accessing this information?**
+
+Students examine:
+
+* readability
+* captions
+* alt text
+* color contrast
+* navigation
+* document structure
+* mobile usability
+* plain language
+
+They then build an improved version or recommendation.
+
+---
+
+# 5. ADD "THE RAZORBACK QUESTION"
+
+Create a new feature called:
+
+# The Razorback Question
+
+Purpose:
+
+Allow members of the UArk community to submit questions that could become student investigations.
+
+Examples:
+
+* Why is this information difficult to find?
+* Is this campus claim actually true?
+* Who makes this decision?
+* Why do students misunderstand this policy?
+* What does AI say about this community?
+* Where can students find reliable information about this issue?
+
+Create a page:
+
+`/uark/questions`
+
+Users can:
+
+* submit a question
+* view approved questions
+* upvote questions
+* filter questions
+* see whether a question has become an investigation
+* see whether an investigation has produced a Media Patch
+
+Suggested statuses:
+
+* Submitted
+* Under Review
+* Open for Investigation
+* Investigation Started
+* Patch Published
+* Closed
+
+Admin should moderate submitted questions before publication.
+
+Do not allow anonymous public posting without moderation.
+
+---
+
+# 6. LINK QUESTIONS TO INVESTIGATIONS
+
+Add an optional relationship:
+
+Community Question
+→ Investigation
+→ Evidence Receipt
+→ Media Patch
+→ Power Ping
+→ Response / Impact
+
+If a student chooses a Razorback Question, allow them to click:
+
+**Investigate This**
+
+This should start a new Reboot investigation pre-populated with the question.
+
+---
+
+# 7. LOCALIZE THE REBOOT PROTOCOL
+
+Keep the existing seven-stage Reboot Protocol.
+
+For UArk investigations, add relevant prompts.
+
+## Stage 1 — Crash Report
+
+Ask:
+
+* What information problem are you investigating?
+* Who in the university/community is affected?
+* Why does it matter?
+* What do people currently believe?
+
+## Stage 2 — System Trace
+
+Ask:
+
+* Where did this information originate?
+* What official sources exist?
+* What unofficial sources exist?
+* How does the information circulate?
+* Who controls or produces the information?
+* Whose voices are missing?
+
+## Stage 3 — Red Team Room
+
+Ask:
+
+* What evidence could challenge your current conclusion?
+* Are you making assumptions?
+* What alternative explanation exists?
+* What evidence would change your mind?
+* Have you represented people fairly?
+
+## Stage 4 — Build the Patch
+
+Students choose an output:
+
+* article
+* podcast
+* short documentary
+* infographic
+* data story
+* digital zine
+* interactive webpage
+* public guide
+* AI audit
+* accessibility redesign
+
+## Stage 5 — Ship With Receipts
+
+Require an Evidence Receipt.
+
+For each major claim capture:
+
+* claim
+* source
+* source type
+* link/citation
+* verification method
+* confidence level
+* notes
+* uncertainty
+
+## Stage 6 — Power Ping
+
+Students identify someone positioned to respond.
+
+Examples of target roles:
+
+* university office
+* administrator
+* faculty member
+* student organization
+* journalist
+* public official
+* community organization
+
+Require respectful, evidence-based communication.
+
+Do not frame Power Pings as harassment, public shaming, or mass campaigning.
+
+## Stage 7 — Patch Notes
+
+Publish the completed investigation as a UArk Media Patch.
+
+---
+
+# 8. ADD IMPACT TRACKING
+
+Enhance Power Ping with response tracking.
+
+Suggested statuses:
+
+* Draft
+* Ready
+* Sent
+* Response Received
+* Clarification Requested
+* Action Promised
+* Action Taken
+* No Response
+* Closed
+
+Add an optional field:
+
+**What changed because of this investigation?**
+
+Allow students/facilitators to document:
+
+* policy clarification
+* webpage corrected
+* resource created
+* misinformation corrected
+* conversation initiated
+* organization responded
+* no observable change
+
+Do not imply that every investigation must cause institutional change.
+
+Learning and public understanding also count as outcomes.
+
+---
+
+# 9. UARK MEDIA PATCHES
+
+Create a filter or dedicated route:
+
+`/uark/patches`
+
+Display cards showing:
+
+* project title
+* investigation question
+* student/crew
+* mission
+* topic
+* publication date
+* evidence receipt indicator
+* Power Ping indicator
+* response status
+* media type
+* short summary
+
+Filters:
+
+* AI Literacy
+* Misinformation
+* Campus Information
+* Representation
+* Accessibility
+* Algorithms
+* Community
+* Journalism
+* Data
+* Information Access
+
+Allow visitors to open the full Media Patch.
+
+---
+
+# 10. CREATE A UARK DASHBOARD VIEW
+
+For users participating in the UArk community, create a localized dashboard section.
+
+Display:
+
+## My UArk Activity
+
+* investigations
+* missions completed
+* active Razorback Questions
+* Evidence Receipts
+* Media Patches
+* Power Pings
+* responses
+* XP
+* badges
+
+Also display:
+
+## Campus Impact
+
+Examples:
+
+* Questions Investigated
+* Evidence Receipts Published
+* Media Patches Created
+* Power Pings Sent
+* Responses Received
+* Verified Contributions
+
+Use meaningful statistics, not vanity metrics.
+
+---
+
+# 11. ADD UARK BADGES
+
+Preserve existing badges.
+
+Add optional community-specific badges such as:
+
+### Razorback Investigator
+
+Complete first UArk investigation.
+
+### AI Auditor
+
+Complete an AI-focused investigation.
+
+### Campus Fact Checker
+
+Complete a misinformation or verification mission.
+
+### Information Mapper
+
+Complete an Information Desert investigation.
+
+### Community Listener
+
+Use interviews or community evidence appropriately.
+
+### Power Ping: UArk
+
+Send the first evidence-backed UArk Power Ping.
+
+### Patch the Campus
+
+Publish a UArk Media Patch.
+
+### They Responded
+
+Receive a documented response to a Power Ping.
+
+### Evidence First
+
+Complete multiple high-quality Evidence Receipts.
+
+Do not award XP merely for clicking buttons.
+
+XP should represent meaningful learning actions.
+
+---
+
+# 12. ETHICS AND SAFETY
+
+Because this platform involves university/community investigations, build clear ethical safeguards.
+
+Add an **Investigation Ethics** notice when starting UArk investigations.
+
+Students should acknowledge:
+
+* investigate systems and claims, not attack individuals
+* do not publish private personal information
+* do not doxx anyone
+* do not secretly record people
+* obtain appropriate consent for interviews
+* verify claims before publication
+* distinguish evidence from opinion
+* acknowledge uncertainty
+* provide appropriate context
+* allow people/organizations to respond when appropriate
+* respect copyright
+* follow applicable university policies
+* avoid defamatory or unsupported accusations
+
+Add:
+
+**Constructive Critical Inquiry**
+
+explanation:
+
+> CTRL+ALT+MEDIA encourages rigorous questioning, but investigations should seek understanding, evidence, accountability, and better information—not harassment or public shaming.
+
+---
+
+# 13. REBOOT ROOM — UARK
+
+Allow UArk Media Patches to have community responses.
+
+Keep the existing response types:
+
+### Verify
+
+Add evidence that confirms, challenges, or expands the investigation.
+
+### Amplify
+
+Provide useful context or help connect the work to relevant audiences.
+
+### Apply
+
+Describe how the findings or resource were used.
+
+All responses should remain moderated before public display.
+
+---
+
+# 14. ADD CAMPUS/COMMUNITY ROLES
+
+Allow users to optionally identify roles such as:
+
+* Undergraduate Student
+* Graduate Student
+* Faculty
+* Staff
+* Community Member
+* Student Organization
+* Facilitator
+
+Do not publicly expose a person's role unless they choose to display it.
+
+---
+
+# 15. NAVIGATION
+
+Add a UArk area without overcrowding the main navigation.
+
+Possible structure:
+
+**Communities**
+→ UArk
+
+Inside the UArk hub:
+
+* UArk Home
+* UArk Missions
+* Razorback Questions
+* Investigations
+* Media Patches
+* Reboot Room
+* Campus Impact
+* Resources
+
+On mobile, maintain a clean collapsible navigation.
+
+---
+
+# 16. HOMEPAGE ENTRY POINT
+
+On the main CTRL+ALT+MEDIA homepage, add a section:
+
+## Explore Communities
+
+Card:
+
+### CTRL+ALT+MEDIA @ UArk
+
+**University of Arkansas · Fayetteville**
+
+> Razorbacks investigating the information systems shaping campus and community life.
+
+Button:
+
+**Enter UArk Hub**
+
+Build this component so future communities can be added dynamically.
+
+---
+
+# 17. RESOURCE COLLECTION
+
+Inside the UArk hub, create resource categories:
+
+### Research & Verification
+
+### AI Literacy
+
+### Journalism
+
+### Media Production
+
+### Data & Visualization
+
+### Accessibility
+
+### Digital Safety
+
+### Community Engagement
+
+### University Resources
+
+For now, create the structure and use existing CTRL+ALT+MEDIA resources when relevant.
+
+Do not fabricate University of Arkansas URLs or offices.
+
+Where a university-specific resource has not yet been verified, use a placeholder such as:
+
+**University-specific resource to be added by facilitator**
+
+rather than inventing information.
+
+---
+
+# 18. FACILITATOR / INSTRUCTOR FEATURES
+
+Add a UArk facilitator view.
+
+Facilitators should be able to:
+
+* create UArk missions
+* create investigation prompts
+* approve Razorback Questions
+* moderate Reboot Room submissions
+* review Evidence Receipts
+* review Media Patches
+* monitor mission completion
+* view student progress
+* view Power Ping status
+* feature exemplary investigations
+* archive inappropriate questions
+* see community-level analytics
+
+Do not expose admin functionality to normal students.
+
+---
+
+# 19. FACULTY COURSE USE
+
+Add an optional concept of:
+
+## Cohort / Course
+
+Examples:
+
+* EDST 32003
+* ETEC course
+* Journalism course
+* Student organization
+* Research cohort
+
+Suggested fields:
+
+* id
+* communityId
+* name
+* description
+* facilitator
+* joinCode
+* startDate
+* endDate
+* visibility
+
+Students can belong to a cohort while still participating in the wider UArk community.
+
+This will allow instructors to use CTRL+ALT+MEDIA for classroom assignments without turning the entire platform into an LMS.
+
+Do not build a full gradebook yet.
+
+---
+
+# 20. DATABASE RELATIONSHIPS
+
+Where appropriate, support this structure:
+
+Community
+
+→ Cohorts
+
+→ Questions
+
+→ Missions
+
+→ Investigations
+
+→ Evidence Receipts
+
+→ Media Patches
+
+→ Power Pings
+
+→ Responses
+
+→ Impact Records
+
+Preserve backwards compatibility with current CTRL+ALT+MEDIA data.
+
+Use migrations rather than destructive database resets.
+
+---
+
+# 21. DESIGN REQUIREMENTS
+
+Preserve the existing CTRL+ALT+MEDIA visual language.
+
+The UArk experience should feel:
+
+* investigative
+* modern
+* student-centered
+* bold
+* credible
+* civic
+* energetic
+* creative
+
+Avoid making it look like a standard university administrative website.
+
+Use cards, badges, progress states, timelines, evidence indicators, and visual investigation flows.
+
+Use the existing fonts/components where possible.
+
+Maintain:
+
+* responsive design
+* keyboard navigation
+* visible focus states
+* semantic HTML
+* accessible labels
+* adequate color contrast
+* alt text support
+* reduced-motion awareness
+
+Do not use tiny text.
+
+---
+
+# 22. FEATURED UARK HOMEPAGE SECTIONS
+
+Build the UArk landing page in approximately this order:
+
+### Hero
+
+CTRL+ALT+MEDIA @ UArk
+
+### What Will You Investigate?
+
+Display example investigation questions.
+
+### UArk Missions
+
+Display mission cards.
+
+### The Razorback Question
+
+Show community questions.
+
+### Reboot the Information
+
+Visual explanation of the seven-stage Reboot Protocol.
+
+### Latest Media Patches
+
+Show recent published work.
+
+### Evidence Matters
+
+Explain Evidence Receipts.
+
+### From Evidence to Action
+
+Explain Power Pings.
+
+### Campus Impact
+
+Show meaningful impact statistics.
+
+### Join the Investigation
+
+CTA.
+
+---
+
+# 23. EXAMPLE QUESTIONS FOR THE LANDING PAGE
+
+Use rotating example questions such as:
+
+**What does AI get wrong about Arkansas?**
+
+**Where do students actually get trustworthy campus information?**
+
+**Whose voices are missing from a story?**
+
+**Why did this campus rumor spread?**
+
+**Can students understand this public document?**
+
+**How do algorithms shape what Razorbacks see?**
+
+Do not present these as claims against the university.
+
+They are examples of researchable questions.
+
+---
+
+# 24. EMPTY STATES
+
+Create useful empty states.
+
+Example:
+
+### No Razorback Questions Yet
+
+> Every investigation starts with a question. What information problem have you noticed around campus or community life?
+
+Button:
+
+**Submit a Question**
+
+For Media Patches:
+
+> The public record is waiting for its first patch.
+
+Button:
+
+**Start an Investigation**
+
+---
+
+# 25. DO NOT REMOVE EXISTING FUNCTIONALITY
+
+Important:
+
+Do not delete, rename, or unnecessarily rewrite existing working features.
+
+Preserve:
+
+* authentication
+* existing users
+* missions
+* dashboard
+* Evidence Receipts
+* Power Pings
+* Media Patches
+* Reboot Room
+* badges
+* XP
+* resources
+* admin functionality
+* existing APIs
+* existing database content
+
+Refactor only where necessary to support the new community architecture.
+
+---
+
+# 26. IMPLEMENTATION APPROACH
+
+Work incrementally.
+
+### Phase 1
+
+Inspect existing code and database.
+
+### Phase 2
+
+Add Community architecture and UArk seed data.
+
+### Phase 3
+
+Build UArk landing page and navigation.
+
+### Phase 4
+
+Add UArk mission category and starter missions.
+
+### Phase 5
+
+Build Razorback Questions.
+
+### Phase 6
+
+Connect Questions → Investigations.
+
+### Phase 7
+
+Add localized dashboards, Media Patch filters, Power Ping impact tracking, and badges.
+
+### Phase 8
+
+Add facilitator/cohort architecture.
+
+### Phase 9
+
+Test accessibility, mobile responsiveness, authorization, database migrations, and existing functionality.
+
+Do not attempt to replace the whole application in one large rewrite.
+
+---
+
+# 27. BEFORE CODING
+
+Before making major changes:
+
+1. Inspect the current project.
+2. Identify the framework and existing directory structure.
+3. Identify existing database models.
+4. Identify how authentication works.
+5. Identify the current Mission, Investigation, Evidence Receipt, Media Patch, Power Ping, XP, Badge, Reboot Room, and Admin models/components.
+6. Reuse existing patterns.
+7. Explain briefly what files/schema changes you intend to make.
+8. Then implement.
+
+Do not create duplicate systems where equivalent functionality already exists.
+
+---
+
+# 28. SUCCESS CRITERIA
+
+When finished, I should be able to:
+
+1. Open CTRL+ALT+MEDIA normally.
+2. Navigate to **CTRL+ALT+MEDIA @ UArk**.
+3. View UArk-specific missions.
+4. Submit a Razorback Question.
+5. Moderate/approve questions as a facilitator.
+6. Select an approved question and start an investigation.
+7. Complete the existing Reboot Protocol.
+8. Attach an Evidence Receipt.
+9. Create a Media Patch.
+10. Send/record a Power Ping.
+11. Track whether a response occurred.
+12. View the project in the UArk Media Patch archive.
+13. See meaningful UArk community activity statistics.
+14. Keep all existing CTRL+ALT+MEDIA functionality working.
+15. Use the architecture later to add other universities or communities.
+
+The ultimate experience should communicate:
+
+> **Students are not just consuming information about their university and community. They are investigating how information works, verifying evidence, creating better public knowledge, and learning that they have agency within the information ecosystem.**
